@@ -1,0 +1,11 @@
+{
+  "name": "studys: NCERT, IIT JEE, NEET (v7.10.54) — 100% Free Learning & Doubt Solver",
+  "description": "100% Free 24/7 interactive doubt solving, NCERT and coaching institute video & PDF solutions, IIT JEE & NEET mock tests, formulas, and bilingual Hindi/English courses.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

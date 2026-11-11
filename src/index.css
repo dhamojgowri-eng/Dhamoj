@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .scan-line {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #fb7185, #f97316, transparent);
+    box-shadow: 0 0 12px #f43f5e;
+    animation: scanMove 2.4s ease-in-out infinite;
+  }
+
+  @keyframes scanMove {
+    0%, 100% {
+      top: 14%;
+      opacity: 0.85;
+    }
+    50% {
+      top: 84%;
+      opacity: 1;
+    }
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+  }
+}

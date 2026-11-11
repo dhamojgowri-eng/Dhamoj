@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>studys: NCERT, IIT JEE, NEET (v7.10.54) — 100% Free Interactive Learning & Doubt Solving App</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+    .dn-gradient {
+      background: linear-gradient(135deg, #e11d48 0%, #ea580c 100%);
+    }
+    .dn-dark-gradient {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+    .scan-line {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #fb7185, #f97316, transparent);
+      box-shadow: 0 0 12px #f43f5e;
+      animation: scanMove 2.4s ease-in-out infinite;
+    }
+    @keyframes scanMove {
+      0%, 100% { top: 14%; opacity: 0.85; }
+      50% { top: 84%; opacity: 1; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col pb-20 lg:pb-6">
+
+  <!-- Toast Notification Banner -->
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- Top App Bar -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <button type="button" onclick="switchTab('ask')" class="flex items-center gap-2.5 text-left group focus:outline-none">
+          <div class="w-10 h-10 rounded-xl dn-gradient flex items-center justify-center text-white font-extrabold text-lg shadow-sm group-hover:scale-105 transition">
+            <span>ST</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-base sm:text-lg tracking-tight text-slate-900">studys</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">v7.10.54</span>
+              <span id="proHeaderBadge" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">100% FREE FOREVER</span>
+            </div>
+            <p id="headerSubtitle" class="text-xs text-slate-500">NCERT • IIT JEE • NEET • Classes 6–12 • 100% Free 24/7 Doubt Solving</p>
+          </div>
+        </button>
+      </div>
+
+      <!-- Global Controls: Class, Board, Hindi/English, Doubtnut Pro -->
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Class / Exam Filter -->
+        <label class="sr-only" for="classSelect">Select Class or Exam</label>
+        <select id="classSelect" onchange="handleClassChange(this.value)" class="text-xs sm:text-sm font-medium bg-slate-100 hover:bg-slate-200/80 text-slate-800 rounded-lg px-2.5 py-1.5 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500">
+          <option value="ALL">All Classes &amp; Exams</option>
+          <option value="Class 12">Class 12</option>
+          <option value="Class 11">Class 11</option>
+          <option value="Class 10">Class 10</option>
+          <option value="Class 9">Class 9</option>
+          <option value="Class 8">Class 8</option>
+          <option value="Class 7">Class 7</option>
+          <option value="Class 6">Class 6</option>
+          <option value="IIT JEE">IIT JEE (Mains &amp; Adv)</option>
+          <option value="NEET">NEET UG</option>
+          <option value="Govt Exams">Govt Exams (SSC/IBPS/NDA/CTET)</option>
+        </select>
+
+        <!-- Board Selector -->
+        <label class="sr-only" for="boardSelect">Select Board</label>
+        <select id="boardSelect" onchange="handleBoardChange(this.value)" class="text-xs sm:text-sm font-medium bg-slate-100 hover:bg-slate-200/80 text-slate-800 rounded-lg px-2.5 py-1.5 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500">
+          <option value="CBSE">CBSE Board</option>
+          <option value="Bihar Board">Bihar Board</option>
+          <option value="UP Board">UP Board</option>
+          <option value="Rajasthan Board">Rajasthan Board</option>
+          <option value="MP Board">MP Board</option>
+          <option value="Telangana Board">Telangana Board</option>
+        </select>
+
+        <!-- Bilingual Language Toggle -->
+        <button type="button" id="langToggleBtn" onclick="toggleLanguage()" class="text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 flex items-center gap-1.5 transition">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="langToggleLabel">EN / हिंदी</span>
+        </button>
+
+        <!-- Doubtnut Pro Button -->
+        <button type="button" id="proBtn" onclick="openProModal()" class="text-xs sm:text-sm font-bold px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-500 text-slate-950 shadow-sm flex items-center gap-1.5 transition">
+          <span>⚡ studys Free Pass</span>
+          <span class="text-[11px] bg-slate-900/15 px-1.5 py-0.5 rounded">₹0 Free</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Desktop Navigation Bar -->
+    <div class="hidden lg:block border-t border-slate-100 bg-slate-50/70">
+      <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <nav class="flex items-center space-x-1 py-1.5" aria-label="Main Navigation">
+          <button type="button" data-nav="ask" onclick="switchTab('ask')" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+            <span>📸</span> <span data-i18n="nav_ask">24/7 Ask Doubt</span>
+          </button>
+          <button type="button" data-nav="books" onclick="switchTab('books')" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+            <span>📚</span> <span data-i18n="nav_books">NCERT &amp; Textbooks (11 Publishers)</span>
+          </button>
+          <button type="button" data-nav="exams" onclick="switchTab('exams')" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+            <span>🎯</span> <span data-i18n="nav_exams">IIT JEE, NEET &amp; Govt Exams</span>
+          </button>
+          <button type="button" data-nav="shorts" onclick="switchTab('shorts')" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+            <span>🎬</span> <span data-i18n="nav_shorts">studys Shorts &amp; Spoken English</span>
+          </button>
+          <button type="button" data-nav="pro_apk" onclick="switchTab('pro_apk')" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+            <span>🎁</span> <span data-i18n="nav_apk">CEO Refer (₹1000) &amp; APK Info</span>
+          </button>
+        </nav>
+        <div class="flex items-center gap-3 text-xs text-slate-600">
+          <span>Saved Doubts: <strong id="savedCountDesktop" class="text-rose-600">0</strong></span>
+          <span>•</span>
+          <a href="https://doubtnut.en.aptoide.com/app" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:underline font-medium">Aptoide Listing ↗</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-5 space-y-6">
+
+    <!-- Active Filter Context Pill Strip -->
+    <div class="bg-white rounded-xl border border-slate-200 p-3 flex flex-wrap items-center justify-between gap-2 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+        <span class="font-semibold text-slate-700" data-i18n="active_curriculum">Active Curriculum:</span>
+        <span id="activeClassBadge" class="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 font-semibold border border-rose-200">All Classes &amp; Exams</span>
+        <span id="activeBoardBadge" class="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-200">CBSE Board</span>
+        <span id="activeLangBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">English + Hindi Medium</span>
+      </div>
+      <div class="flex items-center gap-2 text-xs">
+        <span class="text-slate-500">10M+ Downloads • 4.17★ Rating • 25.5 MB</span>
+        <button type="button" onclick="switchTab('pro_apk')" class="text-rose-600 font-semibold hover:underline">APK Details</button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 1: 24/7 ASK A DOUBT (CAMERA / VOICE / TEXT + VIDEO/PDF SOLUTION PLAYER)
+         ========================================== -->
+    <section id="tab-ask" class="tab-panel space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left Column: Camera Scanner, Voice & Search Input -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="dn-gradient p-4 text-white flex items-center justify-between">
+              <div>
+                <h1 class="font-extrabold text-lg" data-i18n="scanner_title">24/7 Instant Doubt Solver</h1>
+                <p class="text-xs text-rose-100" data-i18n="scanner_subtitle">Snap a photo, speak, or type any Maths/Science question</p>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-white/20 text-xs font-bold backdrop-blur">24×7 Live</span>
+            </div>
+
+            <!-- Simulated Camera Viewfinder / Photo Upload Area -->
+            <div class="p-4 space-y-4">
+              <div id="cameraViewport" class="relative rounded-xl bg-slate-900 text-white h-52 flex flex-col items-center justify-center p-4 overflow-hidden border-2 border-dashed border-rose-400/60">
+                <div class="scan-line" id="scannerLaser"></div>
+                <!-- Corner Reticles -->
+                <div class="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-rose-400"></div>
+                <div class="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-rose-400"></div>
+                <div class="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-rose-400"></div>
+                <div class="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-rose-400"></div>
+
+                <div id="cameraPreviewContent" class="text-center z-10 space-y-2 max-w-xs">
+                  <div class="text-xs uppercase tracking-wider text-rose-300 font-semibold">Camera OCR Equation Scanner</div>
+                  <div id="scannedEquationPreview" class="font-mono text-sm sm:text-base bg-slate-800/90 px-3 py-2 rounded-lg border border-slate-700 text-amber-300">
+                    ∫ (from 0 to π/4) ln(1 + tan x) dx = ?
+                  </div>
+                  <p id="scannedMetaPreview" class="text-[11px] text-slate-300">Detected: Class 12 / IIT JEE Mains • Calculus (Definite Integration)</p>
+                </div>
+              </div>
+
+              <!-- Camera, Upload & Voice Action Buttons -->
+              <div class="grid grid-cols-3 gap-2">
+                <button type="button" onclick="triggerCameraSnap()" class="px-3 py-2.5 rounded-xl dn-gradient text-white font-bold text-xs sm:text-sm shadow-sm hover:opacity-95 flex flex-col items-center justify-center gap-1 transition">
+                  <span class="text-base">📸</span>
+                  <span data-i18n="btn_snap">Snap &amp; Solve</span>
+                </button>
+
+                <label for="doubtImageUpload" class="cursor-pointer px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 transition text-center">
+                  <span class="text-base">🖼️</span>
+                  <span data-i18n="btn_upload">Upload Photo</span>
+                  <input id="doubtImageUpload" type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
+                </label>
+
+                <button type="button" id="voiceSearchBtn" onclick="simulateVoiceDoubt()" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 transition">
+                  <span class="text-base">🎙️</span>
+                  <span id="voiceBtnLabel" data-i18n="btn_voice">Voice Doubt</span>
+                </button>
+              </div>
+
+              <!-- Text Doubt Search Input -->
+              <div class="space-y-2 pt-1">
+                <label for="doubtSearchInput" class="block text-xs font-semibold text-slate-600" data-i18n="type_doubt_label">Or Type / Search Your Question (English or Hindi):</label>
+                <div class="flex gap-2">
+                  <input id="doubtSearchInput" type="text" oninput="filterDoubtList(this.value)" placeholder="e.g., Integrate ln(1+tan x), Ohm's law, Projectile, Molarity..." class="flex-1 text-sm rounded-xl border border-slate-300 px-3.5 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500" />
+                  <button type="button" onclick="solveTypedDoubt()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs sm:text-sm transition">
+                    Solve
+                  </button>
+                </div>
+              </div>
+
+              <!-- Preset Doubt Library List -->
+              <div class="space-y-2 pt-2 border-t border-slate-100">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-500" data-i18n="sample_doubts_heading">Instant Step-by-Step Problems (Click to Solve)</span>
+                  <span id="doubtMatchCount" class="text-xs font-semibold text-rose-600">6 available</span>
+                </div>
+                <div id="doubtPresetList" class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Step-by-Step Video & PDF Solution Studio -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+            <!-- Solution Header Bar -->
+            <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50">
+              <div class="space-y-0.5">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span id="solTagBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">IIT JEE / Class 12 Maths</span>
+                  <span id="solBookBadge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-700">NCERT &amp; Cengage Calculus</span>
+                </div>
+                <h2 id="solTitle" class="font-bold text-base sm:text-lg text-slate-900">Evaluate ∫ (0 to π/4) ln(1 + tan x) dx</h2>
+              </div>
+
+              <!-- Solution Format Switcher: Video vs PDF + Bookmark -->
+              <div class="flex items-center gap-2">
+                <div class="inline-flex rounded-xl bg-slate-200 p-1">
+                  <button type="button" id="modeVideoBtn" onclick="setSolutionFormat('video')" class="px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-sm transition">
+                    ▶️ Video Solution
+                  </button>
+                  <button type="button" id="modePdfBtn" onclick="setSolutionFormat('pdf')" class="px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition">
+                    📄 PDF Solution
+                  </button>
+                </div>
+                <button type="button" id="bookmarkDoubtBtn" onclick="toggleBookmarkCurrentDoubt()" class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold hover:bg-slate-100 transition">
+                  ☆ Save
+                </button>
+              </div>
+            </div>
+
+            <!-- VIDEO SOLUTION VIEW (Interactive HTML5 Chalkboard Canvas + Audio Teacher) -->
+            <div id="videoSolutionContainer" class="p-4 space-y-4">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 border border-slate-800 shadow-inner">
+                <canvas id="solutionCanvas" width="760" height="360" class="w-full h-64 sm:h-80 block"></canvas>
+                <!-- Overlay Controls -->
+                <div class="bg-slate-900/95 border-t border-slate-800 px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-white">
+                  <div class="flex items-center gap-2">
+                    <button type="button" id="videoPlayPauseBtn" onclick="toggleVideoPlayback()" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-xs font-bold transition">
+                      ⏸ Pause Chalkboard
+                    </button>
+                    <button type="button" onclick="restartVideoSolution()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold transition">
+                      ↺ Replay
+                    </button>
+                    <button type="button" id="audioMuteBtn" onclick="toggleAudioSound()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold transition">
+                      🔊 Sound: ON
+                    </button>
+                  </div>
+
+                  <!-- Step Pills -->
+                  <div class="flex items-center gap-1.5" id="videoStepButtons"></div>
+
+                  <!-- Playback Speed -->
+                  <div class="flex items-center gap-1 text-xs">
+                    <span class="text-slate-400">Speed:</span>
+                    <button type="button" onclick="setVideoSpeed(1)" id="speed1x" class="px-2 py-0.5 rounded bg-rose-600 text-white font-bold">1x</button>
+                    <button type="button" onclick="setVideoSpeed(1.5)" id="speed15x" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">1.5x</button>
+                    <button type="button" onclick="setVideoSpeed(2)" id="speed2x" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">2x</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step-by-Step Interactive Transcript below Video -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200">
+                  <div class="text-xs font-bold uppercase tracking-wider text-amber-800 mb-1">⚡ Shortcut Technique &amp; Key Concept</div>
+                  <p id="solShortcutText" class="text-xs sm:text-sm text-amber-950 font-medium"></p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200">
+                  <div class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-1"> हिंदी माध्यम सारांश (Hindi Medium Explanation)</div>
+                  <p id="solHindiText" class="text-xs sm:text-sm text-emerald-950 font-medium"></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- PDF SOLUTION VIEW -->
+            <div id="pdfSolutionContainer" class="hidden p-5 space-y-4 bg-slate-50">
+              <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                  <div>
+                    <span class="text-xs font-bold text-rose-600 uppercase tracking-wider">studys Verified Free PDF Solution Sheet</span>
+                    <h3 id="pdfTitle" class="text-base font-extrabold text-slate-900 mt-0.5"></h3>
+                  </div>
+                  <button type="button" onclick="copySolutionText()" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
+                    📋 Copy Solution Notes
+                  </button>
+                </div>
+                <div id="pdfStepsList" class="space-y-3 text-sm text-slate-800"></div>
+                <div class="p-3.5 rounded-lg bg-slate-100 border border-slate-200 text-xs space-y-1">
+                  <div class="font-bold text-slate-900">Practice Tip &amp; Board Exam Weightage:</div>
+                  <p id="pdfTipText" class="text-slate-700"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         TAB 2: NCERT, REFERENCE TEXTBOOKS & COACHING MODULES (11 PUBLISHERS)
+         ========================================== -->
+    <section id="tab-books" class="tab-panel hidden space-y-5">
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">NCERT, Reference Textbooks &amp; Coaching Institute Solutions</h2>
+            <p class="text-xs sm:text-sm text-slate-600">Video &amp; PDF solutions for Classes 6–12 across CBSE, Bihar, UP, Rajasthan, MP &amp; Telangana Boards</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input id="bookSearchInput" type="text" oninput="renderBooksGrid()" placeholder="Search publisher, subject, or chapter..." class="text-xs sm:text-sm rounded-xl border border-slate-300 px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-rose-500" />
+          </div>
+        </div>
+
+        <!-- Publisher Pills (All 11 Verified Publishers from Aptoide Listing) -->
+        <div class="flex flex-wrap gap-1.5" id="publisherFilterBar"></div>
+
+        <!-- Subject Filter Pills -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
+          <span class="text-xs font-bold text-slate-500 uppercase">Subject:</span>
+          <div class="flex flex-wrap gap-1.5" id="subjectFilterBar"></div>
+        </div>
+      </div>
+
+      <!-- Books Grid -->
+      <div id="booksGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- ==========================================
+         TAB 3: IIT JEE, NEET & GOVT EXAMS PREP HUB + INTERACTIVE MOCK TEST
+         ========================================== -->
+    <section id="tab-exams" class="tab-panel hidden space-y-6">
+      <!-- Top Exam Category Switcher -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Competitive Entrance &amp; Government Exam Preparation</h2>
+            <p class="text-xs sm:text-sm text-slate-600">Previous Year Question Papers (JEE Mains 2019–2021, JEE Adv, NEET 2018–2021), Mock Tests, Formulae &amp; Date Sheets</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5" id="examCategoryButtons">
+            <button type="button" onclick="setExamCategory('ALL')" data-examcat="ALL" class="exam-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-600 text-white">All Exams</button>
+            <button type="button" onclick="setExamCategory('IIT JEE')" data-examcat="IIT JEE" class="exam-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700">IIT JEE (Mains &amp; Adv)</button>
+            <button type="button" onclick="setExamCategory('NEET')" data-examcat="NEET" class="exam-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700">NEET UG (2018–2021 PYQs)</button>
+            <button type="button" onclick="setExamCategory('Govt Exams')" data-examcat="Govt Exams" class="exam-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700">11 Govt Exams (SSC/IBPS/NDA/CTET)</button>
+          </div>
+        </div>
+
+        <!-- Government Exams Verified Badge Strip -->
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center gap-1.5 text-xs">
+          <span class="font-bold text-slate-700 mr-1">Supported Govt &amp; Defence Exams:</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">IBPS-PO</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">IBPS-Clerk</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">SBI-PO</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">CTET</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">UPTET</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">DSSSB TGT</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">DSSSB PRT</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">SSC GD</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">SSC CGL</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">Railways</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium">NDA</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 7 Cols: Interactive Mock Test & PYQ Paper Simulator -->
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-rose-600">Live Exam Simulator</span>
+              <h3 id="mockPaperTitle" class="text-base sm:text-lg font-extrabold text-slate-900">IIT JEE Mains &amp; NEET Practice Mock Test</h3>
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="mockPaperSelect" onchange="selectMockPaper(this.value)" class="text-xs font-semibold rounded-lg border border-slate-300 px-2.5 py-1.5 bg-slate-50">
+                <option value="jee_2021">JEE Mains Previous Year Paper (2021 - EN/HI)</option>
+                <option value="jee_adv">JEE Advanced Objective Practice Paper</option>
+                <option value="neet_2021">NEET Previous Year Paper (2018–2021 - EN/HI)</option>
+                <option value="govt_ssc">Govt Exam Mock: SSC CGL / IBPS-PO / NDA</option>
+              </select>
+              <span id="mockTimerBadge" class="px-2.5 py-1 rounded-lg bg-slate-900 text-white font-mono text-xs font-bold">15:00</span>
+            </div>
+          </div>
+
+          <!-- Active Question Card -->
+          <div id="mockQuestionArea" class="space-y-4"></div>
+
+          <!-- Mock Test Controls & Instant Scorecard -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-100">
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="prevMockQuestion()" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold hover:bg-slate-100">← Prev</button>
+              <button type="button" onclick="nextMockQuestion()" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold hover:bg-slate-100">Next →</button>
+              <button type="button" onclick="resetMockTest()" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">Reset Paper</button>
+            </div>
+            <button type="button" onclick="submitMockTest()" class="px-4 py-2 rounded-xl dn-gradient text-white text-xs sm:text-sm font-bold shadow-sm hover:opacity-95">
+              Submit &amp; View Solutions
+            </button>
+          </div>
+
+          <div id="mockResultSummary" class="hidden p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2"></div>
+        </div>
+
+        <!-- Right 5 Cols: Formulae Collections + Important Date Sheets & Exam Announcements -->
+        <div class="lg:col-span-5 space-y-5">
+          <!-- Formulae & Shortcut Sheets -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-extrabold text-base text-slate-900">📐 Formulae Collections &amp; Shortcut Tricks</h3>
+              <span class="text-xs text-rose-600 font-semibold">Hindi &amp; English</span>
+            </div>
+            <div id="formulaCardsList" class="space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar pr-1"></div>
+          </div>
+
+          <!-- Date Sheets & Exam Announcements -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-extrabold text-base text-slate-900">📅 Date Sheets &amp; Exam Announcements</h3>
+              <span class="text-xs text-slate-500">Live Schedule</span>
+            </div>
+            <div id="examScheduleList" class="space-y-2.5"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         TAB 4: DN SHORTS & SPOKEN ENGLISH / GRAMMAR COURSES
+         ========================================== -->
+    <section id="tab-shorts" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 6 Cols: DN Shorts Vertical Video Feed -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-rose-600 text-white text-[11px] font-bold">NEW IN v7.10.54</span>
+                <h2 class="text-lg font-extrabold text-slate-900">studys Shorts — 60s Free Learning &amp; Tricks</h2>
+              </div>
+              <p class="text-xs text-slate-600">Short educational &amp; entertaining videos on Maths Tricks, Science, Motivation &amp; Art</p>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="changeShort(-1)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold">↑ Prev</button>
+              <button type="button" onclick="changeShort(1)" class="px-2.5 py-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-500 text-xs font-bold">↓ Next Short</button>
+            </div>
+          </div>
+
+          <!-- Interactive Short Video Stage -->
+          <div class="relative rounded-2xl overflow-hidden bg-slate-950 text-white border border-slate-800 shadow-lg">
+            <canvas id="dnShortCanvas" width="540" height="340" class="w-full h-72 sm:h-80 block"></canvas>
+            <div class="p-4 bg-gradient-to-t from-slate-950 via-slate-900/95 to-transparent flex items-end justify-between gap-4">
+              <div class="space-y-1">
+                <span id="shortCategoryBadge" class="px-2.5 py-0.5 rounded-full bg-rose-500/30 border border-rose-400/40 text-rose-200 text-xs font-bold">Maths Trick</span>
+                <h3 id="shortTitle" class="font-extrabold text-base sm:text-lg text-white"></h3>
+                <p id="shortCaption" class="text-xs text-slate-300"></p>
+              </div>
+              <div class="flex flex-col items-center gap-2">
+                <button type="button" id="shortLikeBtn" onclick="likeCurrentShort()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold flex items-center gap-1.5 transition">
+                  <span>❤️</span> <span id="shortLikesCount">14.2K</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shorts Playlist Selector -->
+          <div id="shortsPlaylistGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+        </div>
+
+        <!-- Right 6 Cols: Spoken English & English Grammar Interactive Courses -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Language &amp; Communication</span>
+            <h2 class="text-lg font-extrabold text-slate-900">Spoken English &amp; English Grammar Courses</h2>
+            <p class="text-xs text-slate-600">Interactive lessons &amp; instant grammar checks for Hindi &amp; English medium students</p>
+          </div>
+
+          <div id="englishCoursesList" class="space-y-3"></div>
+
+          <!-- Mini Grammar Quick-Check Interactive Box -->
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Interactive Grammar &amp; Spoken English Check</span>
+              <span id="grammarScoreBadge" class="text-xs font-bold text-emerald-700">Practice Mode</span>
+            </div>
+            <p id="grammarPromptText" class="text-sm font-semibold text-slate-900">Choose the grammatically correct sentence for formal exam &amp; interview communication:</p>
+            <div id="grammarOptionsContainer" class="space-y-2"></div>
+            <p id="grammarFeedbackText" class="text-xs font-medium text-slate-600 hidden"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         TAB 5: CEO REFER & EARN (₹1000) + APTOIDE APK v7.10.54 INFO & FAQS
+         ========================================== -->
+    <section id="tab-pro_apk" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 6 Cols: Doubtnut CEO Refer & Earn Program + Doubtnut Pro -->
+        <div class="lg:col-span-6 space-y-5">
+          <!-- CEO Refer & Earn Card -->
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+            <div class="dn-gradient p-5 text-white space-y-1">
+              <span class="px-2.5 py-0.5 rounded-full bg-white/20 text-xs font-bold uppercase">What's New in v7.10.54</span>
+              <h2 class="text-xl font-extrabold">studys Community Refer &amp; Earn Program</h2>
+              <p class="text-xs sm:text-sm text-rose-100">All <strong>studys</strong> courses are 100% free of cost for users — invite friends and earn up to <strong>₹1,000 Paytm Cashback</strong> on community milestones!</p>
+            </div>
+            <div class="p-5 space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                  <label for="referralCountSlider" class="block text-xs font-bold text-slate-600">Simulated Friend Admissions: <span id="referralCountValue" class="text-rose-600 font-extrabold">3</span></label>
+                  <input id="referralCountSlider" type="range" min="1" max="20" value="3" oninput="updateReferralCalculator(this.value)" class="w-full mt-2 accent-rose-600" />
+                  <p class="text-[11px] text-slate-500 mt-1">Up to ₹1,000 Paytm cashback per admission</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex flex-col justify-center">
+                  <span class="text-xs font-semibold text-emerald-800">Estimated Paytm Cashback</span>
+                  <span id="referralCashbackTotal" class="text-2xl font-extrabold text-emerald-700">₹3,000</span>
+                  <span class="text-[11px] text-emerald-700">Direct to Paytm Wallet</span>
+                </div>
+              </div>
+
+              <!-- Referral Code Copy Box -->
+              <div class="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-slate-100 border border-slate-200">
+                <div>
+                  <span class="text-[11px] font-semibold text-slate-500 block">Your CEO Referral Code:</span>
+                  <code id="ceoReferralCode" class="font-mono font-bold text-sm text-slate-900">STUDYS-FREE-71054</code>
+                </div>
+                <button type="button" onclick="copyReferralCode()" class="px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+                  📋 Copy Code &amp; Invite Link
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Verified Aptoide FAQ Accordion -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+            <h3 class="font-extrabold text-base text-slate-900">Frequently Asked Questions (Verified Aptoide Listing)</h3>
+            <div id="faqAccordionList" class="space-y-2"></div>
+          </div>
+        </div>
+
+        <!-- Right 6 Cols: Aptoide APK v7.10.54 Technical Specification & Permissions -->
+        <div class="lg:col-span-6 space-y-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+            <div class="flex items-start justify-between gap-3 border-b border-slate-200 pb-3">
+              <div>
+                <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-bold">Trusted • Malware-Scanned by Aptoide</span>
+                <h2 class="text-lg font-extrabold text-slate-900 mt-1">studys for NCERT, JEE, NEET (100% Free Edition) — App Information</h2>
+                <p class="text-xs text-slate-500">Source: <a href="https://doubtnut.en.aptoide.com/app" target="_blank" rel="noopener noreferrer" class="text-rose-600 underline">https://doubtnut.en.aptoide.com/app</a></p>
+              </div>
+              <div class="text-right">
+                <div class="text-xl font-extrabold text-slate-900">4.17 ★</div>
+                <div class="text-[11px] text-slate-500">6 Reviews • PEGI-3</div>
+              </div>
+            </div>
+
+            <!-- Metadata Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                <span class="text-slate-500 block">Package ID</span>
+                <strong class="font-mono text-slate-900">com.doubtnutapp</strong>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                <span class="text-slate-500 block">Latest Version</span>
+                <strong class="text-slate-900">7.10.54 (25.5 MB)</strong>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                <span class="text-slate-500 block">Downloads</span>
+                <strong class="text-slate-900">10M+ (10 Millions)</strong>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                <span class="text-slate-500 block">Android Compatibility</span>
+                <strong class="text-slate-900">5.1+ (Lollipop)</strong>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                <span class="text-slate-500 block">Developer (CN / Org)</span>
+                <strong class="text-slate-900">Aditya Shankar / DoubtNut</strong>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                <span class="text-slate-500 block">Location</span>
+                <strong class="text-slate-900">Gurgaon, Haryana (91)</strong>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs space-y-1">
+              <div class="flex flex-wrap justify-between gap-1">
+                <span class="text-slate-500">SHA1 Signature:</span>
+                <code class="font-mono text-[11px] text-slate-800 break-all">51:1D:FF:90:D8:B9:B8:26:9A:36:CA:1E:5E:8B:88:03:41:72:D3:FA</code>
+              </div>
+              <div class="flex flex-wrap justify-between gap-1">
+                <span class="text-slate-500">Privacy Policy:</span>
+                <a href="https://doubtnut.com/privacy-policy" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:underline">https://doubtnut.com/privacy-policy</a>
+              </div>
+            </div>
+
+            <!-- Version History Table -->
+            <div class="space-y-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Available APK Versions on Aptoide</h3>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border border-slate-200 rounded-lg overflow-hidden">
+                  <thead class="bg-slate-100 text-slate-700">
+                    <tr>
+                      <th class="p-2">Version</th>
+                      <th class="p-2">Release Date</th>
+                      <th class="p-2">Size</th>
+                      <th class="p-2">Downloads</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200">
+                    <tr>
+                      <td class="p-2 font-bold text-rose-600">7.10.54 (Latest)</td>
+                      <td class="p-2">20/03/2025 (Updated 22/05/2026)</td>
+                      <td class="p-2">25.5 MB</td>
+                      <td class="p-2">10M</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 font-semibold">7.10.51</td>
+                      <td class="p-2">27/03/2025</td>
+                      <td class="p-2">26.5 MB</td>
+                      <td class="p-2">10M</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 font-semibold">7.8.63</td>
+                      <td class="p-2">12/05/2020</td>
+                      <td class="p-2">18.5 MB</td>
+                      <td class="p-2">10M</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 33 Android Permissions Inspector -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <label for="permSearchInput" class="text-xs font-bold uppercase tracking-wider text-slate-500">33 Android Permissions Inspector</label>
+                <input id="permSearchInput" type="text" oninput="renderPermissionsList(this.value)" placeholder="Filter 33 permissions..." class="text-xs border border-slate-300 rounded-lg px-2 py-1" />
+              </div>
+              <div id="permissionsListBox" class="max-h-40 overflow-y-auto custom-scrollbar p-2.5 rounded-lg bg-slate-900 text-slate-200 font-mono text-[11px] space-y-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 grid grid-cols-5 py-1.5 px-1 shadow-lg" aria-label="Mobile Navigation">
+    <button type="button" data-nav="ask" onclick="switchTab('ask')" class="nav-tab-btn flex flex-col items-center justify-center py-1 rounded-lg text-[11px] font-semibold">
+      <span class="text-base">📸</span>
+      <span>Ask Doubt</span>
+    </button>
+    <button type="button" data-nav="books" onclick="switchTab('books')" class="nav-tab-btn flex flex-col items-center justify-center py-1 rounded-lg text-[11px] font-semibold">
+      <span class="text-base">📚</span>
+      <span>Books</span>
+    </button>
+    <button type="button" data-nav="exams" onclick="switchTab('exams')" class="nav-tab-btn flex flex-col items-center justify-center py-1 rounded-lg text-[11px] font-semibold">
+      <span class="text-base">🎯</span>
+      <span>JEE/NEET</span>
+    </button>
+    <button type="button" data-nav="shorts" onclick="switchTab('shorts')" class="nav-tab-btn flex flex-col items-center justify-center py-1 rounded-lg text-[11px] font-semibold">
+      <span class="text-base">🎬</span>
+      <span>Shorts</span>
+    </button>
+    <button type="button" data-nav="pro_apk" onclick="switchTab('pro_apk')" class="nav-tab-btn flex flex-col items-center justify-center py-1 rounded-lg text-[11px] font-semibold">
+      <span class="text-base">🎁</span>
+      <span>Refer/APK</span>
+    </button>
+  </nav>
+
+  <!-- Doubtnut Pro Modal (Rs 1/day Ad-Free Upgrade) -->
+  <div id="proModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between">
+        <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">studys 100% Free • v7.10.54</span>
+        <button type="button" onclick="closeProModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+      <h3 class="text-xl font-extrabold text-slate-900">studys is 100% Free of Cost (₹0 Forever)</h3>
+      <p class="text-xs sm:text-sm text-slate-600">
+        Every feature on <strong>studys</strong> is completely free of cost for all students—enjoy uninterrupted 24/7 step-by-step video solutions, unlimited IIT JEE &amp; NEET mock tests, and downloadable NCERT/Coaching PDF notes with zero subscription fees.
+      </p>
+      <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+        <li class="flex items-center gap-2"><span>✅</span> <span>100% Free Forever (₹0/day — No Subscription Required)</span></li>
+        <li class="flex items-center gap-2"><span>✅</span> <span>Zero Ads across all Video &amp; PDF Solutions</span></li>
+        <li class="flex items-center gap-2"><span>✅</span> <span>Unlimited Free Access to NCERT, RD Sharma, Cengage, FITJEE &amp; VMC Solutions</span></li>
+      </ul>
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button type="button" onclick="closeProModal()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100">Later</button>
+        <button type="button" id="activateProModalBtn" onclick="toggleProMembership()" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold text-xs sm:text-sm shadow">
+          Keep 100% Free Ad-Free Mode Active (₹0)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================
+    // GROUNDED DATA STORE (Backed by Aptoide v7.10.54 Listing)
+    // =========================================================
+    const DOUBTS_DATABASE = [
+      {
+        id: 'd1',
+        title: 'Evaluate ∫ (from 0 to π/4) ln(1 + tan x) dx',
+        classLevel: 'Class 12',
+        examTag: 'IIT JEE / Class 12 Maths',
+        bookSource: 'NCERT Class 12 & Cengage Calculus',
+        subject: 'Mathematics',
+        equation: 'I = ∫₀^(π/4) ln(1 + tan x) dx',
+        steps: [
+          'Step 1: Apply King\'s Property of Definite Integrals: ∫₀ᵃ f(x) dx = ∫₀ᵃ f(a - x) dx.',
+          'Step 2: Substitute x → (π/4 - x): I = ∫₀^(π/4) ln(1 + tan(π/4 - x)) dx.',
+          'Step 3: Expand tan(π/4 - x) = (1 - tan x) / (1 + tan x), giving 1 + tan(π/4 - x) = 2 / (1 + tan x).',
+          'Step 4: I = ∫₀^(π/4) [ln 2 - ln(1 + tan x)] dx = (π/4) ln 2 - I  ⇒  2I = (π/4) ln 2  ⇒  I = (π/8) ln 2.'
+        ],
+        shortcut: 'Standard Form Shortcut: Whenever ∫₀^(π/4) ln(1 + tan x) dx appears in JEE Mains or NDA, directly apply I = (Upper Limit / 2) × ln 2 = (π/8) ln 2 in 5 seconds!',
+        hindiSummary: 'निश्चित समाकलन के गुणधर्म ∫₀ᵃ f(x)dx = ∫₀ᵃ f(a-x)dx का उपयोग करने पर 2I = (π/4) ln 2 प्राप्त होता है, अतः उत्तर I = (π/8) ln 2 है।',
+        boardTip: 'Frequently asked in CBSE Class 12 Board Exams (4 Marks) and IIT JEE Mains (2019, 2021).'
+      },
+      {
+        id: 'd2',
+        title: 'Find equivalent resistance between A & B in a balanced Wheatstone Bridge (R₁=4Ω, R₂=4Ω, R₃=4Ω, R₄=4Ω, R_galv=10Ω)',
+        classLevel: 'Class 12',
+        examTag: 'NEET / Class 12 Physics',
+        bookSource: 'NCERT Physics & Narayana / VMC Module',
+        subject: 'Physics',
+        equation: 'R₁/R₂ = R₃/R₄ = 1  ⇒  I_G = 0  ⇒  R_eq = 4 Ω',
+        steps: [
+          'Step 1: Check the bridge balance condition: R₁ / R₂ = 4Ω / 4Ω = 1 and R₃ / R₄ = 4Ω / 4Ω = 1.',
+          'Step 2: Since R₁/R₂ = R₃/R₄, the Wheatstone bridge is balanced and no current flows through the central 10Ω resistor.',
+          'Step 3: Remove the central 10Ω branch. Upper branch has R₁ + R₂ = 4 + 4 = 8Ω; lower branch has R₃ + R₄ = 4 + 4 = 8Ω.',
+          'Step 4: Combine the two 8Ω parallel branches: R_eq = (8 × 8) / (8 + 8) = 4 Ω.'
+        ],
+        shortcut: 'Symmetrical Balanced Bridge Rule: If all 4 outer arms of a Wheatstone bridge have equal resistance R, then R_eq across opposite corners is always equal to R (here 4 Ω), regardless of the central resistor!',
+        hindiSummary: 'संतुलित व्हीटस्टोन सेतु में मध्य प्रतिरोध (10Ω) में कोई धारा प्रवाहित नहीं होती। अतः R_eq = (8 × 8)/(8 + 8) = 4 Ω होगा।',
+        boardTip: 'High-yield circuit problem in NEET (2018–2021), JEE Mains, and UP/Bihar/CBSE Class 12 Physics.'
+      },
+      {
+        id: 'd3',
+        title: 'Solve Quadratic Equation 2x² - 7x + 3 = 0 by Completing the Square & Quadratic Formula',
+        classLevel: 'Class 10',
+        examTag: 'Class 10 Board Exams',
+        bookSource: 'NCERT Class 10, RD Sharma & KC Sinha',
+        subject: 'Mathematics',
+        equation: '2x² - 7x + 3 = 0  ⇒  x = 3  or  x = 1/2',
+        steps: [
+          'Step 1: Compare 2x² - 7x + 3 = 0 with ax² + bx + c = 0: a = 2, b = -7, c = 3.',
+          'Step 2: Compute discriminant D = b² - 4ac = (-7)² - 4(2)(3) = 49 - 24 = 25 > 0 (two distinct real roots).',
+          'Step 3: Apply Sridharacharya formula: x = [-b ± √D] / (2a) = [7 ± √25] / 4 = (7 ± 5) / 4.',
+          'Step 4: Roots are x₁ = (7 + 5)/4 = 3 and x₂ = (7 - 5)/4 = 1/2.'
+        ],
+        shortcut: 'Middle-Term Split Check: Product ac = 6, Sum b = -7 ⇒ factors are -6 and -1. Divide by a=2 and flip signs: 6/2 = 3 and 1/2!',
+        hindiSummary: 'द्विघात सूत्र x = [-b ± √(b² - 4ac)] / 2a से D = 49 - 24 = 25 मिलता है। अतः मूल x = 3 और x = 1/2 हैं।',
+        boardTip: 'Core question across CBSE, Bihar Board, UP Board, Rajasthan Board, MP Board & Telangana Board Class 10 exams.'
+      },
+      {
+        id: 'd4',
+        title: 'Calculate Molarity of NaOH solution prepared by dissolving 4g of NaOH in 250 mL of water',
+        classLevel: 'Class 11',
+        examTag: 'NEET / JEE / Class 11 Chemistry',
+        bookSource: 'NCERT Chemistry & FITJEE / Bansal Material',
+        subject: 'Chemistry',
+        equation: 'M = (Mass / Molar Mass) × (1000 / V_mL) = 0.4 M',
+        steps: [
+          'Step 1: Find molar mass of NaOH = 23 (Na) + 16 (O) + 1 (H) = 40 g/mol.',
+          'Step 2: Calculate moles of NaOH (n) = Given Mass / Molar Mass = 4 g / 40 g/mol = 0.1 mol.',
+          'Step 3: Convert solution volume V = 250 mL = 0.250 L.',
+          'Step 4: Molarity (M) = n / V(L) = 0.1 / 0.250 = 0.4 mol/L (0.4 M).'
+        ],
+        shortcut: '1-Line Formula: M = (w × 1000) / (M₀ × V_mL) = (4 × 1000) / (40 × 250) = 0.4 M.',
+        hindiSummary: 'NaOH के मोल = 4/40 = 0.1 मोल। मोलरता (M) = (0.1 × 1000) / 250 = 0.4 M।',
+        boardTip: 'Essential stoichiometry calculation for Class 11 & 12 Chemistry, NEET, and JEE Mains.'
+      },
+      {
+        id: 'd5',
+        title: 'Explain Mendel\'s Law of Segregation with a Monohybrid Cross (Tt × Tt) Phenotypic & Genotypic Ratio',
+        classLevel: 'Class 12',
+        examTag: 'NEET Biology & Class 10/12 Boards',
+        bookSource: 'NCERT Biology & Pathfinder Publications',
+        subject: 'Biology',
+        equation: 'Phenotypic Ratio = 3 : 1  |  Genotypic Ratio = 1 : 2 : 1',
+        steps: [
+          'Step 1: Cross pure tall (TT) with pure dwarf (tt) pea plants (Pisum sativum) to obtain F₁ hybrid heterozygous tall (Tt).',
+          'Step 2: Self-pollinate F₁ plants (Tt × Tt). Gametes segregate cleanly into 50% T and 50% t without blending.',
+          'Step 3: Punnett Square produces F₂ genotypes: 1 TT (Homozygous Tall) : 2 Tt (Heterozygous Tall) : 1 tt (Homozygous Dwarf).',
+          'Step 4: Phenotypic ratio is 3 Tall : 1 Dwarf; Genotypic ratio is 1 : 2 : 1.'
+        ],
+        shortcut: 'For n heterozygous gene pairs, number of gametes = 2ⁿ, phenotypic ratio = (3:1)ⁿ, and genotypic ratio = (1:2:1)ⁿ.',
+        hindiSummary: 'मेंडल के पृथक्करण नियम के अनुसार F₂ पीढ़ी में लक्षण प्ररूप अनुपात 3:1 (लंबे:बौने) तथा जीन प्ररूप अनुपात 1:2:1 (TT:Tt:tt) होता है।',
+        boardTip: 'Guaranteed question in NEET Biology (2018–2021 PYQs) and Class 10/12 Board Biology.'
+      },
+      {
+        id: 'd6',
+        title: 'Find Compound Interest on ₹12,500 at 8% per annum for 2 years compounded annually',
+        classLevel: 'Class 8',
+        examTag: 'Class 8 Maths & Govt Exams (SSC CGL / IBPS-PO)',
+        bookSource: 'NCERT Class 8 & RS Aggarwal Quantitative Aptitude',
+        subject: 'Mathematics',
+        equation: 'A = P(1 + R/100)ⁿ = ₹14,580  ⇒  CI = ₹2,080',
+        steps: [
+          'Step 1: Identify Principal P = ₹12,500, Rate R = 8% p.a., Time n = 2 years.',
+          'Step 2: Compute (1 + R/100) = 1 + 8/100 = 27/25.',
+          'Step 3: Amount A = 12500 × (27/25) × (27/25) = 20 × 729 = ₹14,580.',
+          'Step 4: Compound Interest CI = A - P = 14580 - 12500 = ₹2,080.'
+        ],
+        shortcut: 'Effective 2-Year Rate Trick: Net CI% for 2 years at R% = 2R + R²/100 = 16 + 0.64 = 16.64%. Then 16.64% of ₹12,500 = ₹2,080!',
+        hindiSummary: '2 वर्ष के लिए प्रभावी चक्रवृद्धि ब्याज दर = 8 + 8 + (8×8)/100 = 16.64%। अतः चक्रवृद्धि ब्याज = 12500 × 16.64% = ₹2,080।',
+        boardTip: 'Important for Classes 8–10 and Govt Exams (IBPS-PO, IBPS-Clerk, SBI-PO, SSC CGL, SSC GD, Railways).'
+      }
+    ];
+
+    const TEXTBOOKS_DATABASE = [
+      { id: 'b1', publisher: 'NCERT', title: 'NCERT Mathematics (Classes 6–12)', classes: ['Class 6','Class 7','Class 8','Class 9','Class 10','Class 11','Class 12'], subject: 'Mathematics', chapters: 16, solvedCount: '4,850+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd1' },
+      { id: 'b2', publisher: 'NCERT', title: 'NCERT Physics Part I & II (Classes 11–12)', classes: ['Class 11','Class 12','IIT JEE','NEET'], subject: 'Physics', chapters: 15, solvedCount: '2,940+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd2' },
+      { id: 'b3', publisher: 'NCERT', title: 'NCERT Chemistry & Biology Complete Solutions', classes: ['Class 9','Class 10','Class 11','Class 12','NEET'], subject: 'Chemistry', chapters: 30, solvedCount: '5,120+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd4' },
+      { id: 'b4', publisher: 'RD Sharma', title: 'RD Sharma Mathematics (Classes 6–12)', classes: ['Class 6','Class 7','Class 8','Class 9','Class 10','Class 11','Class 12'], subject: 'Mathematics', chapters: 24, solvedCount: '6,400+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd3' },
+      { id: 'b5', publisher: 'RS Aggarwal', title: 'RS Aggarwal Secondary Maths & Quantitative Aptitude', classes: ['Class 6','Class 7','Class 8','Class 9','Class 10','Govt Exams'], subject: 'Mathematics', chapters: 28, solvedCount: '5,300+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd6' },
+      { id: 'b6', publisher: 'KC Sinha', title: 'KC Sinha Mathematics (Bihar & UP Board Special)', classes: ['Class 10','Class 11','Class 12'], subject: 'Mathematics', chapters: 22, solvedCount: '3,800+', langs: 'Hindi & English', format: 'Video + PDF', linkedDoubtId: 'd3' },
+      { id: 'b7', publisher: 'Manohar Ray', title: 'Manohar Ray (मनोहर रे) Class 10–12 Ganit Solutions', classes: ['Class 10','Class 11','Class 12'], subject: 'Mathematics', chapters: 18, solvedCount: '2,750+', langs: 'Hindi Medium', format: 'Video + PDF', linkedDoubtId: 'd3' },
+      { id: 'b8', publisher: 'Cengage', title: 'Cengage JEE Advanced Calculus & Mechanics Series', classes: ['Class 11','Class 12','IIT JEE'], subject: 'Mathematics', chapters: 20, solvedCount: '4,200+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd1' },
+      { id: 'b9', publisher: 'Narayana', title: 'Narayana Coaching IIT JEE & NEET Module Solutions', classes: ['Class 11','Class 12','IIT JEE','NEET'], subject: 'Physics', chapters: 19, solvedCount: '3,100+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd2' },
+      { id: 'b10', publisher: 'Bansal', title: 'Bansal Classes Kota JEE Mains & Advanced Bank', classes: ['Class 11','Class 12','IIT JEE'], subject: 'Chemistry', chapters: 17, solvedCount: '2,650+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd4' },
+      { id: 'b11', publisher: 'FITJEE', title: 'FITJEE Grand Masters Package & Archive Solutions', classes: ['Class 11','Class 12','IIT JEE'], subject: 'Physics', chapters: 16, solvedCount: '2,890+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd2' },
+      { id: 'b12', publisher: 'VMC', title: 'Vidyamandir Classes (VMC) JEE & NEET Modules', classes: ['Class 11','Class 12','IIT JEE','NEET'], subject: 'Chemistry', chapters: 18, solvedCount: '3,050+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd4' },
+      { id: 'b13', publisher: 'Pathfinder Publications', title: 'Pathfinder Publications Biology & Olympiad Prep', classes: ['Class 11','Class 12','NEET','IIT JEE'], subject: 'Biology', chapters: 21, solvedCount: '2,420+', langs: 'English & Hindi', format: 'Video + PDF', linkedDoubtId: 'd5' }
+    ];
+
+    const MOCK_PAPERS = {
+      jee_2021: {
+        title: 'IIT JEE Mains Previous Year Paper (2019–2021 Series • EN/HI)',
+        category: 'IIT JEE',
+        questions: [
+          {
+            q: 'Q1 (JEE Mains 2021): Evaluate the definite integral ∫₀^(π/4) ln(1 + tan x) dx.',
+            hi: 'प्रश्न 1 (JEE Mains 2021): निश्चित समाकलन ∫₀^(π/4) ln(1 + tan x) dx का मान ज्ञात कीजिए।',
+            options: ['(π / 8) ln 2', '(π / 4) ln 2', '(π / 2) ln 2', 'π ln 2'],
+            answer: 0,
+            explanation: 'Using ∫₀ᵃ f(x)dx = ∫₀ᵃ f(a-x)dx gives 2I = (π/4) ln 2 ⇒ I = (π/8) ln 2.'
+          },
+          {
+            q: 'Q2 (JEE Mains 2020): In a balanced Wheatstone bridge, if each of the four outer arm resistors is 4 Ω and the central galvanometer resistor is 10 Ω, the equivalent resistance is:',
+            hi: 'प्रश्न 2 (JEE Mains 2020): एक संतुलित व्हीटस्टोन सेतु में यदि चारों भुजाओं का प्रतिरोध 4 Ω है और मध्य प्रतिरोध 10 Ω है, तो तुल्य प्रतिरोध क्या होगा?',
+            options: ['8 Ω', '4 Ω', '10 Ω', '2 Ω'],
+            answer: 1,
+            explanation: 'Since R₁/R₂ = R₃/R₄ = 1, no current flows through the 10 Ω branch. Two parallel branches of (4+4)=8 Ω give R_eq = 4 Ω.'
+          },
+          {
+            q: 'Q3 (JEE Mains 2019): What is the molarity of a solution containing 4 g of NaOH dissolved in 250 mL of solution?',
+            hi: 'प्रश्न 3 (JEE Mains 2019): 250 mL विलयन में 4 ग्राम NaOH घोलने पर विलयन की मोलरता क्या होगी?',
+            options: ['0.1 M', '0.2 M', '0.4 M', '1.0 M'],
+            answer: 2,
+            explanation: 'Moles of NaOH = 4/40 = 0.1 mol. Volume = 0.25 L. Molarity = 0.1 / 0.25 = 0.4 M.'
+          }
+        ]
+      },
+      jee_adv: {
+        title: 'IIT JEE Advanced Topic-Wise Objective Practice Paper',
+        category: 'IIT JEE',
+        questions: [
+          {
+            q: 'Q1 (JEE Advanced): A projectile is fired at 45° with initial kinetic energy K. What is its kinetic energy at the highest point of its trajectory?',
+            hi: 'प्रश्न 1 (JEE Advanced): एक प्रक्षेप्य को प्रारंभिक गतिज ऊर्जा K के साथ 45° पर प्रक्षेपित किया जाता है। उच्चतम बिंदु पर इसकी गतिज ऊर्जा क्या होगी?',
+            options: ['K / 4', 'K / 2', 'K / √2', 'Zero'],
+            answer: 1,
+            explanation: 'At highest point, velocity is u cos 45° = u/√2. Thus K_top = ½ m (u cos 45°)² = K cos²(45°) = K / 2.'
+          },
+          {
+            q: 'Q2 (JEE Advanced): If roots of 2x² - 7x + 3 = 0 are α and β, what is the value of α² + β²?',
+            hi: 'प्रश्न 2 (JEE Advanced): यदि 2x² - 7x + 3 = 0 के मूल α और β हैं, तो α² + β² का मान क्या है?',
+            options: ['37 / 4', '49 / 4', '25 / 4', '9'],
+            answer: 0,
+            explanation: 'Roots are 3 and 1/2. Sum of squares = 3² + (1/2)² = 9 + 1/4 = 37/4.'
+          }
+        ]
+      },
+      neet_2021: {
+        title: 'NEET Previous Year Question Paper (2018–2021 Verified Series • EN/HI)',
+        category: 'NEET',
+        questions: [
+          {
+            q: 'Q1 (NEET 2021): In Mendel\'s monohybrid cross between tall (TT) and dwarf (tt) pea plants, the genotypic ratio in the F₂ generation is:',
+            hi: 'प्रश्न 1 (NEET 2021): मेंडल के एकसंकर क्रॉस (TT × tt) की F₂ पीढ़ी में जीन प्ररूप (Genotypic) अनुपात क्या होता है?',
+            options: ['3 : 1', '1 : 2 : 1', '9 : 3 : 3 : 1', '1 : 1'],
+            answer: 1,
+            explanation: 'F₂ generation produces 1 TT : 2 Tt : 1 tt (Genotypic ratio 1:2:1, while phenotypic ratio is 3:1).'
+          },
+          {
+            q: 'Q2 (NEET 2020): Which organelle is known as the powerhouse of the eukaryotic cell due to oxidative phosphorylation (ATP synthesis)?',
+            hi: 'प्रश्न 2 (NEET 2020): ATP संश्लेषण के कारण किस कोशिकांग को कोशिका का ऊर्जा गृह (Powerhouse) कहा जाता है?',
+            options: ['Ribosome', 'Golgi Apparatus', 'Mitochondria', 'Lysosome'],
+            answer: 2,
+            explanation: 'Mitochondria synthesize ATP via cellular respiration and oxidative phosphorylation.'
+          },
+          {
+            q: 'Q3 (NEET 2018/2019): What is the molarity of 4 g NaOH in 250 mL aqueous solution?',
+            hi: 'प्रश्न 3 (NEET 2018/2019): 250 mL जलीय विलयन में 4 ग्राम NaOH की मोलरता कितनी होती है?',
+            options: ['0.4 M', '0.8 M', '0.2 M', '0.04 M'],
+            answer: 0,
+            explanation: 'M = (4 / 40) / 0.25 = 0.4 M.'
+          }
+        ]
+      },
+      govt_ssc: {
+        title: 'Government Exams Mock Test (SSC CGL / IBPS-PO / SBI-PO / CTET / NDA)',
+        category: 'Govt Exams',
+        questions: [
+          {
+            q: 'Q1 (SSC CGL / IBPS-PO): Find the compound interest on ₹12,500 at 8% per annum for 2 years compounded annually.',
+            hi: 'प्रश्न 1 (SSC CGL / IBPS-PO): ₹12,500 पर 8% वार्षिक दर से 2 वर्ष का चक्रवृद्धि ब्याज ज्ञात कीजिए।',
+            options: ['₹2,000', '₹2,080', '₹2,160', '₹1,980'],
+            answer: 1,
+            explanation: 'Effective 2-year rate = 8 + 8 + (64/100) = 16.64%. CI = 12500 × 0.1664 = ₹2,080.'
+          },
+          {
+            q: 'Q2 (NDA / Railways): If sin θ + cos θ = √2, then what is the value of tan θ + cot θ?',
+            hi: 'प्रश्न 2 (NDA / Railways): यदि sin θ + cos θ = √2 है, तो tan θ + cot θ का मान क्या होगा?',
+            options: ['1', '2', '√2', '4'],
+            answer: 1,
+            explanation: 'Squaring both sides: 1 + 2 sin θ cos θ = 2 ⇒ sin θ cos θ = 1/2. Then tan θ + cot θ = 1/(sin θ cos θ) = 2.'
+          }
+        ]
+      }
+    };
+
+    const FORMULAE_LIST = [
+      { title: 'King\'s Property (Definite Integrals)', cat: 'IIT JEE', formula: '∫₀ᵃ f(x) dx = ∫₀ᵃ f(a - x) dx', doubtId: 'd1' },
+      { title: 'Wheatstone Bridge Balance Condition', cat: 'NEET', formula: 'R₁ / R₂ = R₃ / R₄  ⇒  I_galvanometer = 0', doubtId: 'd2' },
+      { title: 'Molarity & Dilution Equation', cat: 'NEET', formula: 'M = (w × 1000) / (M₀ × V_mL)  |  M₁V₁ = M₂V₂', doubtId: 'd4' },
+      { title: '2-Year Compound Interest Shortcut', cat: 'Govt Exams', formula: 'Effective CI% = 2R + (R² / 100)%', doubtId: 'd6' },
+      { title: 'Quadratic Discriminant & Roots', cat: 'IIT JEE', formula: 'x = [-b ± √(b² - 4ac)] / 2a', doubtId: 'd3' }
+    ];
+
+    const EXAM_SCHEDULES = [
+      { id: 's1', exam: 'CBSE, Bihar, UP, Rajasthan, MP & Telangana Boards (Class 10 & 12)', date: 'Board Date Sheets & Sample Papers Active', status: 'Revision & Mock Tests Open', reminded: false },
+      { id: 's2', exam: 'IIT JEE Mains & JEE Advanced Preparation Series', date: '2019, 2020 & 2021 PYQ Solutions + Live Mock Window', status: '24/7 Practice Live', reminded: false },
+      { id: 's3', exam: 'NEET UG Medical Entrance (Hindi & English Medium)', date: '2018–2021 Solved Papers & Chapter MCQ Bank', status: 'Question Bank Active', reminded: false },
+      { id: 's4', exam: 'Govt Exams: IBPS-PO/Clerk, SBI-PO, SSC CGL/GD, CTET, UPTET, DSSSB, Railways, NDA', date: 'All-India Practice Batches & Speed Quizzes', status: 'Open Daily', reminded: false }
+    ];
+
+    const DN_SHORTS_DATA = [
+      {
+        id: 'sh1',
+        category: 'Maths Trick',
+        title: '5-Second Definite Integral Trick: ∫ ln(1 + tan x) dx',
+        caption: 'Crack IIT JEE Mains & NDA integration questions without long substitution!',
+        likes: 14200,
+        liked: false,
+        equation: '∫₀^(π/4) ln(1+tan x) dx = (π/8) ln 2',
+        accent: '#f43f5e'
+      },
+      {
+        id: 'sh2',
+        category: 'Science Trick',
+        title: 'Wheatstone Bridge Symmetry Hack in 10 Seconds',
+        caption: 'Spot balanced bridges immediately in NEET & Class 12 Physics exams.',
+        likes: 9850,
+        liked: false,
+        equation: 'R₁/R₂ = R₃/R₄ ⇒ Ignore Middle Resistor!',
+        accent: '#3b82f6'
+      },
+      {
+        id: 'sh3',
+        category: 'Motivation',
+        title: 'Board & JEE/NEET 90+ Score Daily Timetable Strategy',
+        caption: 'How to combine NCERT textbook revision with PYQ mock tests effectively.',
+        likes: 21400,
+        liked: false,
+        equation: 'NCERT Core + 30 Daily MCQs + 24/7 Doubt Clearing',
+        accent: '#10b981'
+      },
+      {
+        id: 'sh4',
+        category: 'Art & Memory',
+        title: 'Periodic Table & Mendel Ratios Visual Mnemonic',
+        caption: 'Remember s, p, d, f blocks and 3:1 / 1:2:1 ratios with visual diagrams.',
+        likes: 11300,
+        liked: false,
+        equation: 'Monohybrid F₂: Phenotype 3:1 | Genotype 1:2:1',
+        accent: '#f59e0b'
+      }
+    ];
+
+    const ENGLISH_COURSES = [
+      { title: 'Spoken English Fluency for Students & Interviews', level: 'Beginner to Advanced (Hindi + English)', lessons: '45 Video Lessons + Audio Practice', summary: 'Daily conversation, pronunciation, self-introduction, and confidence building.' },
+      { title: 'Complete English Grammar for Class 6–12 Boards', level: 'CBSE & State Boards (Bihar, UP, MP, RJ, TS)', lessons: '60 Concept Modules + PDF Notes', summary: 'Tenses, Active/Passive Voice, Direct/Indirect Speech, Modals, and Clauses.' },
+      { title: 'Competitive English for SSC CGL, IBPS-PO, SBI-PO, NDA & CTET', level: 'Govt Exam Special', lessons: '1,200+ Error Spotting & Reading Comprehension MCQs', summary: 'Subject-Verb Agreement, Idioms, Cloze Test, and Vocabulary shortcuts.' }
+    ];
+
+    const GRAMMAR_QUESTIONS = [
+      {
+        prompt: 'Select the grammatically correct sentence (Subject-Verb Agreement):',
+        options: [
+          { text: 'Neither the teacher nor the students was present.', correct: false, feedback: 'Incorrect: With "neither...nor", the verb agrees with the closer subject ("students" → plural "were").' },
+          { text: 'Neither the teacher nor the students were present.', correct: true, feedback: 'Correct! When two subjects are joined by "neither...nor", the verb agrees with the nearer plural noun ("students were").' },
+          { text: 'Each of the candidates have submitted the form.', correct: false, feedback: 'Incorrect: "Each of..." takes a singular verb ("has submitted").' }
+        ]
+      }
+    ];
+
+    const APTOIDE_FAQS = [
+      {
+        q: 'What is studys (and is it free)?',
+        a: 'studys (inspired by Doubtnut) is a 100% free educational app offering step-by-step video and PDF solutions for mathematics, science, and related subjects across school and competitive exam levels. It covers NCERT textbooks, board exam preparation for Classes 6–12, competitive exams like IIT JEE and NEET, and provides 24/7 homework help completely free of cost.'
+      },
+      {
+        q: 'Does Doubtnut have solutions for all major Indian boards?',
+        a: 'Yes, Doubtnut covers CBSE, Bihar, UP, Rajasthan, MP, and Telangana boards for Classes 6–12. Its content includes NCERT solutions, popular reference textbooks, and board-specific exam materials tailored to support each state and central board\'s unique curriculum requirements.'
+      },
+      {
+        q: 'How do video solutions work on Doubtnut?',
+        a: 'You can search for specific questions using text input, camera images, or voice commands to receive step-by-step video explanations. Each solution includes detailed working, important concepts, shortcut methods, and practice tips to help you understand and solve similar problems.'
+      },
+      {
+        q: 'Can Doubtnut help with IIT JEE and NEET preparation?',
+        a: 'Yes, Doubtnut provides extensive preparation materials for IIT JEE and NEET exams, including previous year papers with detailed solutions, topic-wise practice questions, full-length mock tests, important formula sheets, and video-based shortcut techniques, available in both Hindi and English.'
+      },
+      {
+        q: 'What textbook solutions are available on Doubtnut?',
+        a: 'Doubtnut offers solutions for major academic textbooks including NCERT, RD Sharma, RS Aggarwal, KC Sinha, and Manohar Ray, plus materials from leading coaching institutes such as Cengage, Narayana, Bansal, FITJEE, and VMC, supporting both board and competitive exam preparation.'
+      },
+      {
+        q: 'Is Hindi medium content available on Doubtnut?',
+        a: 'Yes, Doubtnut provides extensive Hindi medium content including complete NCERT solutions, comprehensive IIT JEE and NEET preparation materials (including JEE Mains 2019–2021, NEET 2018–2021, and Foundation courses for Classes 9–12), mock tests, and revision quizzes.'
+      }
+    ];
+
+    const ANDROID_PERMISSIONS = [
+      'android.permission.ACCESS_ADSERVICES_ATTRIBUTION',
+      'android.permission.ACCESS_COARSE_LOCATION',
+      'android.permission.ACCESS_FINE_LOCATION',
+      'android.permission.ACCESS_NETWORK_STATE',
+      'android.permission.ACCESS_WIFI_STATE',
+      'android.permission.ANSWER_PHONE_CALLS',
+      'android.permission.CALL_PHONE',
+      'android.permission.CAMERA',
+      'android.permission.FOREGROUND_SERVICE',
+      'android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK',
+      'android.permission.GET_ACCOUNTS',
+      'android.permission.INTERNET',
+      'android.permission.MODIFY_AUDIO_SETTINGS',
+      'android.permission.POST_NOTIFICATIONS',
+      'android.permission.READ_CALL_LOG',
+      'android.permission.READ_CONTACTS',
+      'android.permission.READ_MEDIA_IMAGES',
+      'android.permission.READ_MEDIA_VIDEO',
+      'android.permission.READ_PHONE_STATE',
+      'android.permission.RECORD_AUDIO',
+      'android.permission.SCHEDULE_EXACT_ALARM',
+      'android.permission.SYSTEM_ALERT_WINDOW',
+      'android.permission.USE_FULL_SCREEN_INTENT',
+      'android.permission.VIBRATE',
+      'android.permission.WAKE_LOCK',
+      'android.permission.WRITE_EXTERNAL_STORAGE',
+      'com.android.vending.BILLING',
+      'com.applovin.array.apphub.permission.BIND_APPHUB_SERVICE',
+      'com.doubtnutapp.permission.MIPUSH_RECEIVE',
+      'com.google.android.c2dm.permission.RECEIVE',
+      'com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE',
+      'com.google.android.gms.permission.AD_ID',
+      'com.truecaller.permission.sdk.internal.read_account_state'
+    ];
+
+    // =========================================================
+    // APPLICATION STATE
+    // =========================================================
+    const state = {
+      activeTab: 'ask',
+      selectedClass: 'ALL',
+      selectedBoard: 'CBSE',
+      language: 'EN', // 'EN' or 'HI'
+      isPro: true,
+      activeDoubtId: 'd1',
+      solutionFormat: 'video', // 'video' or 'pdf'
+      savedDoubts: [],
+      videoPlaying: true,
+      videoStepIndex: 0,
+      videoSpeed: 1,
+      audioEnabled: true,
+      selectedPublisher: 'ALL',
+      selectedSubject: 'ALL',
+      selectedExamCategory: 'ALL',
+      activeMockPaperKey: 'jee_2021',
+      activeMockQuestionIdx: 0,
+      mockAnswers: {},
+      mockSecondsRemaining: 900,
+      activeShortIndex: 0
+    };
+
+    let videoCanvasAnimId = null;
+    let videoStepProgress = 0;
+    let shortCanvasAnimId = null;
+    let shortAnimTick = 0;
+    let mockTimerInterval = null;
+
+    // Safe localStorage wrapper
+    function loadSavedState() {
+      try {
+        const raw = localStorage.getItem('doubtnut_app_state_v71054');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed.savedDoubts)) state.savedDoubts = parsed.savedDoubts;
+          if (typeof parsed.isPro === 'boolean') state.isPro = parsed.isPro;
+        }
+      } catch (e) {
+        // Ignore storage errors in sandboxed iframe
+      }
+    }
+
+    function savePersistentState() {
+      try {
+        localStorage.setItem('doubtnut_app_state_v71054', JSON.stringify({
+          savedDoubts: state.savedDoubts,
+          isPro: state.isPro
+        }));
+      } catch (e) {
+        // Ignore storage errors
+      }
+    }
+
+    // Web Audio API subtle chime for interactions
+    function playChime(freq = 520, duration = 0.09) {
+      if (!state.audioEnabled) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        if (!window._dnAudioCtx) window._dnAudioCtx = new AudioCtx();
+        const ctx = window._dnAudioCtx;
+        if (ctx.state === 'suspended') ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.06, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {
+        // Ignore audio errors
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const el = document.createElement('div');
+      const bg = type === 'success' ? 'bg-emerald-700' : type === 'amber' ? 'bg-amber-600' : 'bg-slate-900';
+      el.className = `${bg} text-white text-xs sm:text-sm font-semibold px-4 py-3 rounded-xl shadow-lg border border-white/15 pointer-events-auto transition duration-200`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 220);
+      }, 2800);
+    }
+
+    // =========================================================
+    // NAVIGATION & GLOBAL HEADER HANDLERS
+    // =========================================================
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== `tab-${tabId}`);
+      });
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        const isCurrent = btn.getAttribute('data-nav') === tabId;
+        if (isCurrent) {
+          btn.classList.add('bg-rose-600', 'text-white', 'shadow-sm');
+          btn.classList.remove('text-slate-600', 'hover:bg-slate-200/60');
+        } else {
+          btn.classList.remove('bg-rose-600', 'text-white', 'shadow-sm');
+          btn.classList.add('text-slate-600', 'hover:bg-slate-200/60');
+        }
+      });
+      playChime(480, 0.06);
+    }
+
+    function handleClassChange(value) {
+      state.selectedClass = value;
+      document.getElementById('activeClassBadge').textContent = value === 'ALL' ? 'All Classes & Exams' : value;
+      filterDoubtList(document.getElementById('doubtSearchInput').value || '');
+      renderBooksGrid();
+      showToast(`Filtered curriculum for: ${value === 'ALL' ? 'All Classes & Exams' : value}`, 'info');
+    }
+
+    function handleBoardChange(value) {
+      state.selectedBoard = value;
+      document.getElementById('activeBoardBadge').textContent = value;
+      showToast(`Board curriculum aligned to ${value}`, 'info');
+    }
+
+    function toggleLanguage() {
+      state.language = state.language === 'EN' ? 'HI' : 'EN';
+      const labelEl = document.getElementById('langToggleLabel');
+      const badgeEl = document.getElementById('activeLangBadge');
+      if (state.language === 'HI') {
+        labelEl.textContent = 'हिंदी माध्यम (HI)';
+        badgeEl.textContent = 'हिंदी माध्यम सक्रिय (Hindi Medium)';
+        document.getElementById('headerSubtitle').textContent = 'NCERT • IIT JEE • NEET • कक्षा 6–12 • 100% निःशुल्क 24/7 डाउट सॉल्विंग ऐप (studys)';
+        showToast('भाषा बदली गई: हिंदी माध्यम (Hindi Medium Active)', 'success');
+      } else {
+        labelEl.textContent = 'EN / हिंदी';
+        badgeEl.textContent = 'English + Hindi Medium';
+        document.getElementById('headerSubtitle').textContent = 'NCERT • IIT JEE • NEET • Classes 6–12 • 100% Free 24/7 Doubt Solving';
+        showToast('Language set to English + Hindi Bilingual Mode', 'info');
+      }
+      renderActiveSolution();
+      renderMockQuestion();
+    }
+
+    function openProModal() {
+      document.getElementById('proModal').classList.remove('hidden');
+    }
+
+    function closeProModal() {
+      document.getElementById('proModal').classList.add('hidden');
+    }
+
+    function toggleProMembership() {
+      state.isPro = !state.isPro;
+      savePersistentState();
+      updateProUI();
+      closeProModal();
+      if (state.isPro) {
+        playChime(660, 0.14);
+        showToast('studys 100% Free Pass Active! All features & ad-free mode unlocked at ₹0 cost.', 'success');
+      } else {
+        showToast('studys Free Mode verified — all courses remain ₹0 free of cost!', 'success');
+      }
+    }
+
+    function updateProUI() {
+      const badge = document.getElementById('proHeaderBadge');
+      const btn = document.getElementById('proBtn');
+      const modalBtn = document.getElementById('activateProModalBtn');
+      if (state.isPro) {
+        badge.classList.remove('hidden');
+        btn.innerHTML = '<span>✅ 100% Free (₹0)</span>';
+        modalBtn.textContent = 'Verified 100% Free Forever (₹0)';
+      } else {
+        badge.classList.remove('hidden');
+        btn.innerHTML = '<span>⚡ studys Free</span><span class="text-[11px] bg-slate-900/15 px-1.5 py-0.5 rounded">₹0 Free</span>';
+        modalBtn.textContent = 'Keep 100% Free Ad-Free Mode Active (₹0)';
+      }
+    }
+
+    // =========================================================
+    // TAB 1: 24/7 ASK A DOUBT & VIDEO/PDF SOLUTION STUDIO
+    // =========================================================
+    function filterDoubtList(query = '') {
+      const q = query.trim().toLowerCase();
+      const filtered = DOUBTS_DATABASE.filter(item => {
+        const matchesClass = state.selectedClass === 'ALL' ||
+          item.classLevel === state.selectedClass ||
+          item.examTag.toLowerCase().includes(state.selectedClass.toLowerCase());
+        const matchesQuery = !q ||
+          item.title.toLowerCase().includes(q) ||
+          item.subject.toLowerCase().includes(q) ||
+          item.bookSource.toLowerCase().includes(q) ||
+          item.equation.toLowerCase().includes(q);
+        return matchesClass && matchesQuery;
+      });
+
+      const listToRender = filtered.length > 0 ? filtered : DOUBTS_DATABASE;
+      document.getElementById('doubtMatchCount').textContent = `${listToRender.length} available`;
+
+      const container = document.getElementById('doubtPresetList');
+      container.innerHTML = listToRender.map(item => {
+        const isSelected = item.id === state.activeDoubtId;
+        return `
+          <button type="button" onclick="selectDoubt('${item.id}')" class="w-full text-left p-3 rounded-xl border transition flex items-start justify-between gap-2 ${isSelected ? 'bg-rose-50 border-rose-400 shadow-sm' : 'bg-slate-50 hover:bg-slate-100 border-slate-200'}">
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">${item.examTag}</span>
+                <span class="text-[10px] font-semibold text-rose-600">${item.bookSource}</span>
+              </div>
+              <div class="text-xs sm:text-sm font-bold text-slate-900">${item.title}</div>
+            </div>
+            <span class="text-xs font-bold text-rose-600 shrink-0">${isSelected ? '▶ Playing' : 'Solve →'}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectDoubt(doubtId) {
+      const found = DOUBTS_DATABASE.find(d => d.id === doubtId);
+      if (!found) return;
+      state.activeDoubtId = doubtId;
+      state.videoStepIndex = 0;
+      videoStepProgress = 0;
+      state.videoPlaying = true;
+      filterDoubtList(document.getElementById('doubtSearchInput').value || '');
+      renderActiveSolution();
+      playChime(580, 0.08);
+    }
+
+    function triggerCameraSnap() {
+      const currentIdx = DOUBTS_DATABASE.findIndex(d => d.id === state.activeDoubtId);
+      const nextIdx = (currentIdx + 1) % DOUBTS_DATABASE.length;
+      const nextDoubt = DOUBTS_DATABASE[nextIdx];
+      selectDoubt(nextDoubt.id);
+      showToast(`Camera OCR scanned: "${nextDoubt.title.slice(0, 48)}..." — Video Solution Ready!`, 'success');
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      triggerCameraSnap();
+      showToast(`Uploaded "${file.name}" — OCR matched step-by-step Video & PDF solution!`, 'success');
+    }
+
+    function simulateVoiceDoubt() {
+      const sampleQueries = [
+        { q: 'Integrate ln(1 + tan x) from 0 to pi/4', id: 'd1' },
+        { q: 'Balanced Wheatstone bridge equivalent resistance', id: 'd2' },
+        { q: 'Quadratic equation 2x^2 - 7x + 3 = 0 roots', id: 'd3' },
+        { q: 'Molarity of 4g NaOH in 250 mL water', id: 'd4' },
+        { q: 'Mendel Law of Segregation monohybrid ratio', id: 'd5' }
+      ];
+      const pick = sampleQueries[Math.floor(Math.random() * sampleQueries.length)];
+      document.getElementById('doubtSearchInput').value = pick.q;
+      selectDoubt(pick.id);
+      showToast(`🎙️ Voice recognized: "${pick.q}"`, 'success');
+    }
+
+    function solveTypedDoubt() {
+      const val = (document.getElementById('doubtSearchInput').value || '').trim();
+      if (!val) {
+        showToast('Type a keyword or equation first, or click Snap & Solve!', 'amber');
+        return;
+      }
+      const q = val.toLowerCase();
+      const match = DOUBTS_DATABASE.find(d =>
+        d.title.toLowerCase().includes(q) ||
+        d.subject.toLowerCase().includes(q) ||
+        d.equation.toLowerCase().includes(q)
+      ) || DOUBTS_DATABASE[0];
+      selectDoubt(match.id);
+      showToast(`Loaded step-by-step solution for "${match.title.slice(0, 45)}..."`, 'success');
+    }
+
+    function setSolutionFormat(fmt) {
+      state.solutionFormat = fmt;
+      const videoContainer = document.getElementById('videoSolutionContainer');
+      const pdfContainer = document.getElementById('pdfSolutionContainer');
+      const vBtn = document.getElementById('modeVideoBtn');
+      const pBtn = document.getElementById('modePdfBtn');
+
+      if (fmt === 'video') {
+        videoContainer.classList.remove('hidden');
+        pdfContainer.classList.add('hidden');
+        vBtn.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-sm transition';
+        pBtn.className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+      } else {
+        videoContainer.classList.add('hidden');
+        pdfContainer.classList.remove('hidden');
+        pBtn.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-sm transition';
+        vBtn.className = 'px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+      }
+      playChime(500, 0.06);
+    }
+
+    function toggleBookmarkCurrentDoubt() {
+      const id = state.activeDoubtId;
+      const idx = state.savedDoubts.indexOf(id);
+      if (idx === -1) {
+        state.savedDoubts.push(id);
+        showToast('Saved solution to your studys free revision bookmarks!', 'success');
+      } else {
+        state.savedDoubts.splice(idx, 1);
+        showToast('Removed solution from bookmarks.', 'info');
+      }
+      savePersistentState();
+      renderActiveSolution();
+    }
+
+    function renderActiveSolution() {
+      const item = DOUBTS_DATABASE.find(d => d.id === state.activeDoubtId) || DOUBTS_DATABASE[0];
+      document.getElementById('scannedEquationPreview').textContent = item.equation;
+      document.getElementById('scannedMetaPreview').textContent = `Detected: ${item.examTag} • ${item.bookSource}`;
+      document.getElementById('solTagBadge').textContent = item.examTag;
+      document.getElementById('solBookBadge').textContent = item.bookSource;
+      document.getElementById('solTitle').textContent = item.title;
+      document.getElementById('solShortcutText').textContent = item.shortcut;
+      document.getElementById('solHindiText').textContent = item.hindiSummary;
+
+      const isSaved = state.savedDoubts.includes(item.id);
+      const bmBtn = document.getElementById('bookmarkDoubtBtn');
+      bmBtn.textContent = isSaved ? '★ Saved' : '☆ Save';
+      bmBtn.className = isSaved
+        ? 'px-3 py-1.5 rounded-xl border border-amber-400 bg-amber-50 text-amber-800 text-xs font-bold transition'
+        : 'px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold hover:bg-slate-100 transition';
+
+      const savedCountEl = document.getElementById('savedCountDesktop');
+      if (savedCountEl) savedCountEl.textContent = String(state.savedDoubts.length);
+
+      // Step selector buttons
+      const stepBtns = document.getElementById('videoStepButtons');
+      stepBtns.innerHTML = item.steps.map((_, idx) => `
+        <button type="button" onclick="jumpToVideoStep(${idx})" class="px-2 py-0.5 rounded text-xs font-bold transition ${idx === state.videoStepIndex ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}">
+          S${idx + 1}
+        </button>
+      `).join('');
+
+      // PDF View Population
+      document.getElementById('pdfTitle').textContent = item.title;
+      document.getElementById('pdfStepsList').innerHTML = item.steps.map((s, idx) => `
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-rose-600 text-white text-xs font-bold flex items-center justify-center shrink-0">${idx + 1}</span>
+          <p class="text-xs sm:text-sm font-medium text-slate-800">${s}</p>
+        </div>
+      `).join('');
+      document.getElementById('pdfTipText').textContent = `${item.boardTip} | Shortcut: ${item.shortcut}`;
+    }
+
+    function jumpToVideoStep(stepIdx) {
+      state.videoStepIndex = stepIdx;
+      videoStepProgress = 0;
+      renderActiveSolution();
+      playChime(600, 0.05);
+    }
+
+    function toggleVideoPlayback() {
+      state.videoPlaying = !state.videoPlaying;
+      document.getElementById('videoPlayPauseBtn').textContent = state.videoPlaying ? '⏸ Pause Chalkboard' : '▶️ Play Chalkboard';
+    }
+
+    function restartVideoSolution() {
+      state.videoStepIndex = 0;
+      videoStepProgress = 0;
+      state.videoPlaying = true;
+      document.getElementById('videoPlayPauseBtn').textContent = '⏸ Pause Chalkboard';
+      renderActiveSolution();
+    }
+
+    function toggleAudioSound() {
+      state.audioEnabled = !state.audioEnabled;
+      document.getElementById('audioMuteBtn').textContent = state.audioEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+    }
+
+    function setVideoSpeed(spd) {
+      state.videoSpeed = spd;
+      ['1', '15', '2'].forEach(code => {
+        const el = document.getElementById(`speed${code}x`);
+        if (el) el.className = 'px-2 py-0.5 rounded bg-slate-800 text-slate-300';
+      });
+      const activeId = spd === 1 ? 'speed1x' : spd === 1.5 ? 'speed15x' : 'speed2x';
+      document.getElementById(activeId).className = 'px-2 py-0.5 rounded bg-rose-600 text-white font-bold';
+    }
+
+    function copySolutionText() {
+      const item = DOUBTS_DATABASE.find(d => d.id === state.activeDoubtId) || DOUBTS_DATABASE[0];
+      const text = `${item.title}\n${item.equation}\n\n${item.steps.join('\n')}\n\nShortcut: ${item.shortcut}`;
+      copyToClipboard(text, 'Copied complete PDF step-by-step solution to clipboard!');
+    }
+
+    // Animated Blackboard Renderer for Video Solution
+    function startSolutionCanvasLoop() {
+      if (videoCanvasAnimId) cancelAnimationFrame(videoCanvasAnimId);
+      const canvas = document.getElementById('solutionCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function frame() {
+        const item = DOUBTS_DATABASE.find(d => d.id === state.activeDoubtId) || DOUBTS_DATABASE[0];
+        if (state.videoPlaying) {
+          videoStepProgress += 0.0045 * state.videoSpeed;
+          if (videoStepProgress >= 1) {
+            videoStepProgress = 0;
+            state.videoStepIndex = (state.videoStepIndex + 1) % item.steps.length;
+            renderActiveSolution();
+          }
+        }
+
+        // Chalkboard Background
+        ctx.fillStyle = '#091426';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Subtle Grid
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < canvas.width; x += 38) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += 38) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+        }
+
+        // Top Banner inside Blackboard
+        ctx.fillStyle = '#f43f5e';
+        ctx.font = 'bold 13px Inter, sans-serif';
+        ctx.fillText(`STUDYS (100% FREE) STEP-BY-STEP VIDEO TEACHER • ${item.examTag.toUpperCase()}`, 22, 28);
+
+        // Core Equation Box
+        ctx.fillStyle = 'rgba(30, 41, 59, 0.9)';
+        ctx.fillRect(22, 40, canvas.width - 44, 42);
+        ctx.strokeStyle = '#fb7185';
+        ctx.strokeRect(22, 40, canvas.width - 44, 42);
+        ctx.fillStyle = '#fde047';
+        ctx.font = 'bold 16px monospace';
+        ctx.fillText(item.equation, 36, 66);
+
+        // Render Steps up to current step index
+        for (let i = 0; i <= state.videoStepIndex; i++) {
+          const stepText = item.steps[i] || '';
+          const yBase = 112 + i * 54;
+          const isCurrent = i === state.videoStepIndex;
+
+          ctx.fillStyle = isCurrent ? 'rgba(244, 63, 94, 0.16)' : 'rgba(15, 23, 42, 0.65)';
+          ctx.fillRect(22, yBase - 20, canvas.width - 44, 44);
+
+          ctx.fillStyle = isCurrent ? '#38bdf8' : '#e2e8f0';
+          ctx.font = isCurrent ? 'bold 13px Inter, sans-serif' : '12.5px Inter, sans-serif';
+
+          const charsToShow = isCurrent
+            ? Math.max(12, Math.floor(stepText.length * Math.min(1, videoStepProgress * 1.35)))
+            : stepText.length;
+          const visibleStr = stepText.slice(0, charsToShow);
+
+          // Wrap onto 2 lines if needed
+          const maxCharsPerLine = 84;
+          if (visibleStr.length <= maxCharsPerLine) {
+            ctx.fillText(visibleStr, 32, yBase);
+          } else {
+            ctx.fillText(visibleStr.slice(0, maxCharsPerLine), 32, yBase - 4);
+            ctx.fillText(visibleStr.slice(maxCharsPerLine, maxCharsPerLine * 2), 32, yBase + 14);
+          }
+        }
+
+        // Bottom Timeline Progress Bar
+        const totalProg = (state.videoStepIndex + videoStepProgress) / item.steps.length;
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(22, canvas.height - 18, canvas.width - 44, 6);
+        ctx.fillStyle = '#f43f5e';
+        ctx.fillRect(22, canvas.height - 18, (canvas.width - 44) * totalProg, 6);
+
+        videoCanvasAnimId = requestAnimationFrame(frame);
+      }
+
+      videoCanvasAnimId = requestAnimationFrame(frame);
+    }
+
+    // =========================================================
+    // TAB 2: TEXTBOOKS & COACHING INSTITUTES (11 PUBLISHERS)
+    // =========================================================
+    const PUBLISHERS = [
+      'ALL', 'NCERT', 'RD Sharma', 'RS Aggarwal', 'KC Sinha', 'Manohar Ray',
+      'Cengage', 'Narayana', 'Bansal', 'FITJEE', 'VMC', 'Pathfinder Publications'
+    ];
+    const SUBJECTS = ['ALL', 'Mathematics', 'Physics', 'Chemistry', 'Biology'];
+
+    function renderPublisherAndSubjectFilters() {
+      const pubBar = document.getElementById('publisherFilterBar');
+      pubBar.innerHTML = PUBLISHERS.map(pub => {
+        const active = state.selectedPublisher === pub;
+        return `
+          <button type="button" onclick="setPublisherFilter('${pub}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition ${active ? 'dn-gradient text-white shadow-sm' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}">
+            ${pub === 'ALL' ? 'All 11 Publishers' : pub}
+          </button>
+        `;
+      }).join('');
+
+      const subBar = document.getElementById('subjectFilterBar');
+      subBar.innerHTML = SUBJECTS.map(sub => {
+        const active = state.selectedSubject === sub;
+        return `
+          <button type="button" onclick="setSubjectFilter('${sub}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition ${active ? 'bg-slate-900 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}">
+            ${sub === 'ALL' ? 'All Subjects' : sub}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setPublisherFilter(pub) {
+      state.selectedPublisher = pub;
+      renderPublisherAndSubjectFilters();
+      renderBooksGrid();
+    }
+
+    function setSubjectFilter(sub) {
+      state.selectedSubject = sub;
+      renderPublisherAndSubjectFilters();
+      renderBooksGrid();
+    }
+
+    function renderBooksGrid() {
+      const q = (document.getElementById('bookSearchInput').value || '').trim().toLowerCase();
+      const filtered = TEXTBOOKS_DATABASE.filter(b => {
+        const matchPub = state.selectedPublisher === 'ALL' || b.publisher === state.selectedPublisher;
+        const matchSub = state.selectedSubject === 'ALL' || b.subject === state.selectedSubject;
+        const matchClass = state.selectedClass === 'ALL' || b.classes.includes(state.selectedClass);
+        const matchQuery = !q || b.title.toLowerCase().includes(q) || b.publisher.toLowerCase().includes(q) || b.subject.toLowerCase().includes(q);
+        return matchPub && matchSub && matchClass && matchQuery;
+      });
+
+      const list = filtered.length > 0 ? filtered : TEXTBOOKS_DATABASE;
+      const grid = document.getElementById('booksGrid');
+      grid.innerHTML = list.map(book => `
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-rose-50 text-rose-700 border border-rose-200">${book.publisher}</span>
+              <span class="text-xs font-semibold text-slate-500">${book.format}</span>
+            </div>
+            <h3 class="font-extrabold text-base text-slate-900">${book.title}</h3>
+            <p class="text-xs text-slate-600">Classes/Exams: <strong>${book.classes.join(', ')}</strong></p>
+            <div class="grid grid-cols-2 gap-2 pt-1 text-xs">
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <span class="text-slate-400 block text-[10px]">Chapters</span>
+                <strong class="text-slate-800">${book.chapters} Chapters</strong>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <span class="text-slate-400 block text-[10px]">Video + PDF Solutions</span>
+                <strong class="text-emerald-700">${book.solvedCount}</strong>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+            <span class="text-[11px] font-semibold text-slate-500">🌐 ${book.langs}</span>
+            <div class="flex gap-1.5">
+              <button type="button" onclick="openBookSolution('${book.linkedDoubtId}', 'video', '${book.title}')" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition">
+                ▶ Video
+              </button>
+              <button type="button" onclick="openBookSolution('${book.linkedDoubtId}', 'pdf', '${book.title}')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+                📄 PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openBookSolution(doubtId, format, bookTitle) {
+      switchTab('ask');
+      selectDoubt(doubtId);
+      setSolutionFormat(format);
+      showToast(`Opened ${format.toUpperCase()} solutions for ${bookTitle}`, 'success');
+    }
+
+    // =========================================================
+    // TAB 3: IIT JEE, NEET & GOVT EXAMS + LIVE MOCK TEST
+    // =========================================================
+    function setExamCategory(cat) {
+      state.selectedExamCategory = cat;
+      document.querySelectorAll('.exam-cat-btn').forEach(btn => {
+        const isCurrent = btn.getAttribute('data-examcat') === cat;
+        btn.className = isCurrent
+          ? 'exam-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-600 text-white'
+          : 'exam-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200';
+      });
+
+      if (cat === 'IIT JEE') selectMockPaper('jee_2021');
+      else if (cat === 'NEET') selectMockPaper('neet_2021');
+      else if (cat === 'Govt Exams') selectMockPaper('govt_ssc');
+      renderFormulaCards();
+    }
+
+    function selectMockPaper(paperKey) {
+      if (!MOCK_PAPERS[paperKey]) return;
+      state.activeMockPaperKey = paperKey;
+      state.activeMockQuestionIdx = 0;
+      state.mockAnswers = {};
+      state.mockSecondsRemaining = 900;
+      document.getElementById('mockPaperSelect').value = paperKey;
+      document.getElementById('mockPaperTitle').textContent = MOCK_PAPERS[paperKey].title;
+      document.getElementById('mockResultSummary').classList.add('hidden');
+      renderMockQuestion();
+    }
+
+    function renderMockQuestion() {
+      const paper = MOCK_PAPERS[state.activeMockPaperKey];
+      const qObj = paper.questions[state.activeMockQuestionIdx];
+      const selectedAns = state.mockAnswers[state.activeMockQuestionIdx];
+
+      const area = document.getElementById('mockQuestionArea');
+      area.innerHTML = `
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-500 font-semibold">
+            <span>Question ${state.activeMockQuestionIdx + 1} of ${paper.questions.length}</span>
+            <span>+4 Marks Correct • -1 Negative Marking</span>
+          </div>
+          <p class="text-sm sm:text-base font-bold text-slate-900">${qObj.q}</p>
+          <p class="text-xs sm:text-sm font-medium text-slate-600">${qObj.hi}</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          ${qObj.options.map((opt, oIdx) => {
+            const isPicked = selectedAns === oIdx;
+            return `
+              <button type="button" onclick="chooseMockOption(${oIdx})" class="p-3 rounded-xl border text-left text-xs sm:text-sm font-semibold transition flex items-center gap-2.5 ${isPicked ? 'bg-rose-50 border-rose-500 text-rose-900 shadow-sm' : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'}">
+                <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${isPicked ? 'bg-rose-600 text-white' : 'bg-slate-100 text-slate-700'}">${String.fromCharCode(65 + oIdx)}</span>
+                <span>${opt}</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function chooseMockOption(optionIdx) {
+      state.mockAnswers[state.activeMockQuestionIdx] = optionIdx;
+      renderMockQuestion();
+      playChime(540, 0.05);
+    }
+
+    function prevMockQuestion() {
+      if (state.activeMockQuestionIdx > 0) {
+        state.activeMockQuestionIdx--;
+        renderMockQuestion();
+      }
+    }
+
+    function nextMockQuestion() {
+      const paper = MOCK_PAPERS[state.activeMockPaperKey];
+      if (state.activeMockQuestionIdx < paper.questions.length - 1) {
+        state.activeMockQuestionIdx++;
+        renderMockQuestion();
+      }
+    }
+
+    function resetMockTest() {
+      state.mockAnswers = {};
+      state.activeMockQuestionIdx = 0;
+      state.mockSecondsRemaining = 900;
+      document.getElementById('mockResultSummary').classList.add('hidden');
+      renderMockQuestion();
+      showToast('Mock test reset! Timer restarted at 15:00.', 'info');
+    }
+
+    function submitMockTest() {
+      const paper = MOCK_PAPERS[state.activeMockPaperKey];
+      let correct = 0;
+      let attempted = 0;
+      const detailsHtml = paper.questions.map((q, idx) => {
+        const userPick = state.mockAnswers[idx];
+        if (typeof userPick === 'number') {
+          attempted++;
+          if (userPick === q.answer) correct++;
+        }
+        const statusBadge = userPick === q.answer
+          ? '<span class="text-emerald-700 font-bold">✔ Correct (+4)</span>'
+          : typeof userPick === 'number'
+            ? '<span class="text-rose-600 font-bold">✘ Incorrect (-1)</span>'
+            : '<span class="text-slate-500 font-semibold">Unattempted (0)</span>';
+        return `
+          <div class="p-2.5 rounded-lg bg-white border border-emerald-200 text-xs space-y-1">
+            <div class="flex justify-between">
+              <strong>Q${idx + 1}: Correct Option (${String.fromCharCode(65 + q.answer)}) ${q.options[q.answer]}</strong>
+              ${statusBadge}
+            </div>
+            <p class="text-slate-600">${q.explanation}</p>
+          </div>
+        `;
+      }).join('');
+
+      const wrong = attempted - correct;
+      const score = correct * 4 - wrong;
+      const maxScore = paper.questions.length * 4;
+      const summaryBox = document.getElementById('mockResultSummary');
+      summaryBox.classList.remove('hidden');
+      summaryBox.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h4 class="font-extrabold text-sm sm:text-base text-emerald-950">Mock Test Result: ${score} / ${maxScore} Marks</h4>
+          <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-200 text-emerald-900">Attempted: ${attempted}/${paper.questions.length} • Correct: ${correct}</span>
+        </div>
+        <div class="space-y-1.5 pt-1">${detailsHtml}</div>
+      `;
+      playChime(680, 0.12);
+      showToast(`Mock Test Submitted! You scored ${score}/${maxScore}.`, 'success');
+    }
+
+    function startMockTimer() {
+      if (mockTimerInterval) clearInterval(mockTimerInterval);
+      mockTimerInterval = setInterval(() => {
+        if (state.mockSecondsRemaining > 0) {
+          state.mockSecondsRemaining--;
+          const mins = String(Math.floor(state.mockSecondsRemaining / 60)).padStart(2, '0');
+          const secs = String(state.mockSecondsRemaining % 60).padStart(2, '0');
+          const badge = document.getElementById('mockTimerBadge');
+          if (badge) badge.textContent = `${mins}:${secs}`;
+        }
+      }, 1000);
+    }
+
+    function renderFormulaCards() {
+      const filtered = FORMULAE_LIST.filter(f =>
+        state.selectedExamCategory === 'ALL' || f.cat === state.selectedExamCategory
+      );
+      const list = filtered.length > 0 ? filtered : FORMULAE_LIST;
+      document.getElementById('formulaCardsList').innerHTML = list.map(f => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800">${f.cat}</span>
+              <strong class="text-xs font-bold text-slate-900">${f.title}</strong>
+            </div>
+            <code class="text-xs font-mono text-slate-700 block mt-1">${f.formula}</code>
+          </div>
+          <button type="button" onclick="openBookSolution('${f.doubtId}', 'video', '${f.title}')" class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-[11px] font-semibold shrink-0 hover:bg-slate-800">
+            Watch Trick
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function renderExamSchedules() {
+      document.getElementById('examScheduleList').innerHTML = EXAM_SCHEDULES.map((item, idx) => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-start justify-between gap-2">
+          <div class="space-y-0.5">
+            <div class="text-xs font-bold text-slate-900">${item.exam}</div>
+            <div class="text-[11px] text-slate-600">${item.date} • <span class="text-emerald-700 font-semibold">${item.status}</span></div>
+          </div>
+          <button type="button" onclick="toggleExamReminder(${idx})" class="px-2.5 py-1 rounded-lg text-[11px] font-bold shrink-0 transition ${item.reminded ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-100'}">
+            ${item.reminded ? '🔔 Alert Set' : '🔔 Remind Me'}
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function toggleExamReminder(idx) {
+      EXAM_SCHEDULES[idx].reminded = !EXAM_SCHEDULES[idx].reminded;
+      renderExamSchedules();
+      showToast(
+        EXAM_SCHEDULES[idx].reminded
+          ? `Exam date-sheet alert enabled for ${EXAM_SCHEDULES[idx].exam}`
+          : 'Exam alert removed.',
+        'success'
+      );
+    }
+
+    // =========================================================
+    // TAB 4: DN SHORTS & SPOKEN ENGLISH / GRAMMAR
+    // =========================================================
+    function renderDNShortView() {
+      const sh = DN_SHORTS_DATA[state.activeShortIndex];
+      document.getElementById('shortCategoryBadge').textContent = sh.category;
+      document.getElementById('shortTitle').textContent = sh.title;
+      document.getElementById('shortCaption').textContent = sh.caption;
+      document.getElementById('shortLikesCount').textContent = sh.liked
+        ? `${((sh.likes + 1) / 1000).toFixed(1)}K`
+        : `${(sh.likes / 1000).toFixed(1)}K`;
+
+      document.getElementById('shortsPlaylistGrid').innerHTML = DN_SHORTS_DATA.map((item, idx) => `
+        <button type="button" onclick="selectShort(${idx})" class="p-2.5 rounded-xl border text-left transition ${idx === state.activeShortIndex ? 'bg-rose-50 border-rose-500' : 'bg-slate-50 hover:bg-slate-100 border-slate-200'}">
+          <span class="text-[10px] font-bold text-rose-600 block">${item.category}</span>
+          <span class="text-xs font-bold text-slate-900 line-clamp-2">${item.title}</span>
+        </button>
+      `).join('');
+    }
+
+    function changeShort(delta) {
+      state.activeShortIndex = (state.activeShortIndex + delta + DN_SHORTS_DATA.length) % DN_SHORTS_DATA.length;
+      shortAnimTick = 0;
+      renderDNShortView();
+      playChime(590, 0.06);
+    }
+
+    function selectShort(idx) {
+      state.activeShortIndex = idx;
+      shortAnimTick = 0;
+      renderDNShortView();
+      playChime(590, 0.06);
+    }
+
+    function likeCurrentShort() {
+      const sh = DN_SHORTS_DATA[state.activeShortIndex];
+      sh.liked = !sh.liked;
+      renderDNShortView();
+      if (sh.liked) showToast(`Liked DN Short: "${sh.title}"`, 'success');
+    }
+
+    function startDNShortsCanvasLoop() {
+      if (shortCanvasAnimId) cancelAnimationFrame(shortCanvasAnimId);
+      const canvas = document.getElementById('dnShortCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function drawShort() {
+        shortAnimTick += 0.03;
+        const sh = DN_SHORTS_DATA[state.activeShortIndex];
+
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Animated concentric pulse circles
+        for (let r = 1; r <= 4; r++) {
+          ctx.beginPath();
+          const radius = ((shortAnimTick * 28 + r * 45) % 220) + 20;
+          ctx.arc(canvas.width / 2, canvas.height / 2 - 15, radius, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(244, 63, 94, 0.14)';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = sh.accent;
+        ctx.font = 'bold 13px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`STUDYS SHORTS • ${sh.category.toUpperCase()}`, canvas.width / 2, 46);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 17px Inter, sans-serif';
+        ctx.fillText(sh.title.slice(0, 48), canvas.width / 2, 92);
+
+        // Formula Highlight Box
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+        ctx.fillRect(40, 128, canvas.width - 80, 74);
+        ctx.strokeStyle = sh.accent;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(40, 128, canvas.width - 80, 74);
+
+        ctx.fillStyle = '#fde047';
+        ctx.font = 'bold 17px monospace';
+        ctx.fillText(sh.equation, canvas.width / 2, 170);
+
+        ctx.textAlign = 'left';
+        shortCanvasAnimId = requestAnimationFrame(drawShort);
+      }
+
+      shortCanvasAnimId = requestAnimationFrame(drawShort);
+    }
+
+    function renderEnglishCourses() {
+      document.getElementById('englishCoursesList').innerHTML = ENGLISH_COURSES.map(c => `
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+          <div class="flex flex-wrap items-center justify-between gap-1">
+            <h3 class="font-bold text-sm text-slate-900">${c.title}</h3>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${c.lessons}</span>
+          </div>
+          <p class="text-xs text-slate-600">${c.summary}</p>
+          <span class="text-[11px] text-slate-500 block">Level: ${c.level}</span>
+        </div>
+      `).join('');
+
+      const gQ = GRAMMAR_QUESTIONS[0];
+      document.getElementById('grammarPromptText').textContent = gQ.prompt;
+      document.getElementById('grammarOptionsContainer').innerHTML = gQ.options.map((opt, idx) => `
+        <button type="button" onclick="checkGrammarAnswer(${idx})" class="w-full text-left p-2.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-xs font-semibold text-slate-800 transition">
+          ${String.fromCharCode(65 + idx)}. ${opt.text}
+        </button>
+      `).join('');
+    }
+
+    function checkGrammarAnswer(idx) {
+      const opt = GRAMMAR_QUESTIONS[0].options[idx];
+      const fb = document.getElementById('grammarFeedbackText');
+      fb.classList.remove('hidden');
+      fb.textContent = opt.feedback;
+      fb.className = opt.correct
+        ? 'text-xs font-bold text-emerald-700 p-2 rounded bg-emerald-50 border border-emerald-200'
+        : 'text-xs font-bold text-rose-600 p-2 rounded bg-rose-50 border border-rose-200';
+      playChime(opt.correct ? 660 : 340, 0.08);
+    }
+
+    // =========================================================
+    // TAB 5: CEO REFER & EARN + APTOIDE APK v7.10.54 INSPECTOR
+    // =========================================================
+    function updateReferralCalculator(val) {
+      const count = parseInt(val, 10) || 1;
+      document.getElementById('referralCountValue').textContent = String(count);
+      const total = count * 1000;
+      document.getElementById('referralCashbackTotal').textContent = `₹${total.toLocaleString('en-IN')}`;
+    }
+
+    function copyToClipboard(text, successMsg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(successMsg, 'success');
+        }).catch(() => {
+          fallbackCopy(text, successMsg);
+        });
+      } else {
+        fallbackCopy(text, successMsg);
+      }
+    }
+
+    function fallbackCopy(text, successMsg) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg, 'success');
+      } catch (e) {
+        showToast('Ready to copy: ' + text, 'info');
+      }
+      ta.remove();
+    }
+
+    function copyReferralCode() {
+      const code = document.getElementById('ceoReferralCode').textContent;
+      copyToClipboard(
+        `Join studys (100% Free NCERT, IIT JEE, NEET learning app) using my code ${code} and get free 24/7 video solutions! https://doubtnut.en.aptoide.com/app`,
+        `Copied CEO Referral Code (${code}) & invite link!`
+      );
+    }
+
+    function renderFaqAccordion() {
+      document.getElementById('faqAccordionList').innerHTML = APTOIDE_FAQS.map((item, idx) => `
+        <details class="group rounded-xl border border-slate-200 bg-slate-50 p-3">
+          <summary class="cursor-pointer font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between">
+            <span>${item.q}</span>
+            <span class="text-rose-600 group-open:rotate-180 transition">▼</span>
+          </summary>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">${item.a}</p>
+        </details>
+      `).join('');
+    }
+
+    function renderPermissionsList(filterText = '') {
+      const q = filterText.trim().toLowerCase();
+      const matched = ANDROID_PERMISSIONS.filter(p => !q || p.toLowerCase().includes(q));
+      document.getElementById('permissionsListBox').innerHTML = matched.map((p, idx) => `
+        <div class="flex items-center justify-between py-0.5 border-b border-slate-800/80">
+          <span>${idx + 1}. ${p}</span>
+          <span class="text-emerald-400">GRANTED</span>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================
+    // INITIALIZE APPLICATION ON LOAD
+    // =========================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedState();
+      updateProUI();
+      switchTab('ask');
+      filterDoubtList('');
+      renderActiveSolution();
+      startSolutionCanvasLoop();
+      renderPublisherAndSubjectFilters();
+      renderBooksGrid();
+      selectMockPaper('jee_2021');
+      startMockTimer();
+      renderFormulaCards();
+      renderExamSchedules();
+      renderDNShortView();
+      startDNShortsCanvasLoop();
+      renderEnglishCourses();
+      renderFaqAccordion();
+      renderPermissionsList('');
+    });
+  </script>
+</body>
+</html>
