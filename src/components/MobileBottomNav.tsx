@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, BookOpen, Target, Film, Gift } from 'lucide-react';
+import { Camera, BookOpen, Target, Film, Server, Gift } from 'lucide-react';
 import { playChime } from '../utils/audio.ts';
 
 interface MobileBottomNavProps {
@@ -18,12 +18,13 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     { id: 'books', icon: BookOpen, label: 'Books' },
     { id: 'exams', icon: Target, label: 'JEE/NEET' },
     { id: 'shorts', icon: Film, label: 'Shorts' },
+    { id: 'mcp', icon: Server, label: 'MCP' },
     { id: 'pro_apk', icon: Gift, label: 'Refer/APK' },
   ];
 
   return (
     <nav
-      className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 grid grid-cols-5 py-1.5 px-1 shadow-lg"
+      className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 grid grid-cols-6 py-1.5 px-1 shadow-lg"
       aria-label="Mobile Navigation"
     >
       {tabs.map((tab) => {

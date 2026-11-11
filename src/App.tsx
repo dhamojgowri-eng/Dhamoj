@@ -5,6 +5,7 @@ import { TextbooksTab } from './components/TextbooksTab.tsx';
 import { ExamsTab } from './components/ExamsTab.tsx';
 import { ShortsTab } from './components/ShortsTab.tsx';
 import { ReferAndApkTab } from './components/ReferAndApkTab.tsx';
+import { McpServerTab } from './components/McpServerTab.tsx';
 import { FreePassModal } from './components/FreePassModal.tsx';
 import { MobileBottomNav } from './components/MobileBottomNav.tsx';
 import { INITIAL_DOUBTS } from './data/mockData.ts';
@@ -211,6 +212,15 @@ export default function App() {
         {/* Tab 4: studys Shorts & Spoken English / Grammar */}
         {activeTab === 'shorts' && (
           <ShortsTab
+            soundEnabled={soundEnabled}
+            language={language}
+            showToast={showToast}
+          />
+        )}
+
+        {/* Tab: Model Context Protocol (MCP) Server Explorer & Playground */}
+        {activeTab === 'mcp' && (
+          <McpServerTab
             soundEnabled={soundEnabled}
             language={language}
             showToast={showToast}

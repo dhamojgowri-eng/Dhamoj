@@ -42,6 +42,7 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'books', icon: '📚', label: language === 'HI' ? 'NCERT व 11 पब्लिशर्स' : 'NCERT & Textbooks (11 Pubs)' },
     { id: 'exams', icon: '🎯', label: language === 'HI' ? 'JEE, NEET व Govt एग्ज़ाम' : 'IIT JEE, NEET & Govt Exams' },
     { id: 'shorts', icon: '🎬', label: language === 'HI' ? 'studys शॉर्ट्स व स्पोकन इंग्लिश' : 'studys Shorts & English' },
+    { id: 'mcp', icon: '🔌', label: language === 'HI' ? 'MCP सर्वर (Tools & SSE)' : 'MCP Server (Tools & SSE)' },
     { id: 'pro_apk', icon: '🎁', label: language === 'HI' ? 'रेफर (₹1000) व APK विवरण' : 'CEO Refer (₹1000) & APK Info' },
   ];
 

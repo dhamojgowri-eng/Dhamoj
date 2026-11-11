@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI, Type } from '@google/genai';
+import { setupMcpRoutes } from './server/mcp.ts';
 
 dotenv.config();
 
@@ -26,6 +27,12 @@ const ai = process.env.GEMINI_API_KEY
       },
     })
   : null;
+
+// Initialize Model Context Protocol (MCP) Server endpoints
+setupMcpRoutes(app, {
+  ai,
+  appUrl: process.env.APP_URL || 'http://localhost:3000',
+});
 
 // API Route: AI Instant Doubt Solver (Camera OCR / Voice / Text)
 app.post('/api/solve-doubt', async (req, res) => {
